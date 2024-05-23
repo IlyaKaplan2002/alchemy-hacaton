@@ -5,7 +5,9 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
 
 export default function Home() {
-  const { client, isLoading, login } = useAccount({ useGasManager: false });
+  const { client, isLoading, login, signup } = useAccount({
+    useGasManager: false,
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
@@ -20,7 +22,7 @@ export default function Home() {
       ) : client ? (
         <ProfileCard />
       ) : (
-        <LogInCard login={login} />
+        <LogInCard login={login} signup={signup} />
       )}
     </main>
   );

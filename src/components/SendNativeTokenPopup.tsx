@@ -37,7 +37,10 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose }) => {
       className="relative z-50"
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="flex min-w-[400px] flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]">
+        <DialogPanel
+          className="flex min-w-[400px] flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]"
+          style={{ maxWidth: "80vw" }}
+        >
           <DialogTitle className="font-bold">Send native token</DialogTitle>
 
           <div className="flex flex-col justify-between gap-6">

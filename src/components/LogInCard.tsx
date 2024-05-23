@@ -7,10 +7,11 @@ import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   login: () => Promise<void>;
+  signup: () => Promise<void>;
 }
 
-export const LogInCard: FC<Props> = ({ login }) => {
-  const { signup, importAccount } = useAccount({ useGasManager: false });
+export const LogInCard: FC<Props> = ({ login, signup }) => {
+  const { importAccount } = useAccount({ useGasManager: false });
 
   const [keyData, setKeyData] = useState<{
     address: string;

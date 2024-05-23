@@ -183,7 +183,10 @@ export const ProfileCard = () => {
   }, [getBalance]);
 
   return (
-    <div className="flex flex-row rounded-lg bg-white p-10 dark:bg-[#0F172A]">
+    <div
+      className="flex flex-row rounded-lg bg-white p-10 dark:bg-[#0F172A]"
+      style={{ maxWidth: "100vw" }}
+    >
       <div className="flex flex-col gap-8">
         <div className="flex justify-between">
           <div className="text-lg font-semibold">Welcome to your profile!</div>
