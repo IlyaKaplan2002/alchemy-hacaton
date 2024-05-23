@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 
 import AddOwner from "./AddOwner";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
@@ -87,7 +87,11 @@ export interface IERC20Token {
   balance: number;
 }
 
-export const ProfileCard = () => {
+interface Props {
+  resetAccount: () => void;
+}
+
+export const ProfileCard: FC<Props> = ({ resetAccount }) => {
   const [balance, setBalance] = useState(0);
   const [tokenAddress, setTokenAddress] = useState("");
   const [importedTokens, setImportedTokens] = useState<IERC20Token[]>([]);
@@ -305,6 +309,13 @@ export const ProfileCard = () => {
         />
 
         <AddOwner />
+
+        <button
+          className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+          onClick={resetAccount}
+        >
+          Reset Account
+        </button>
 
         {/* <ExportAccount /> */}
       </div>

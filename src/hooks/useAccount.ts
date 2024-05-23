@@ -57,5 +57,11 @@ export const useAccount = ({ useGasManager }: Props) => {
     setIsLoading(false);
   }, [bundlerClient]);
 
-  return { client, isLoading, login, signup, importAccount };
+  const resetAccount = useCallback(() => {
+    localStorage.removeItem("mnemonic");
+    localStorage.removeItem("accountAddress");
+    setClient(null);
+  }, []);
+
+  return { client, isLoading, login, signup, importAccount, resetAccount };
 };

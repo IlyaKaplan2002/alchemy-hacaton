@@ -5,12 +5,12 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
 
 export default function Home() {
-  const { client, isLoading, login, signup } = useAccount({
+  const { client, isLoading, login, signup, resetAccount } = useAccount({
     useGasManager: false,
   });
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-24">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
       {isLoading ? (
         // Loading spinner
         <div className="flex items-center justify-center">
@@ -20,7 +20,7 @@ export default function Home() {
           ></div>
         </div>
       ) : client ? (
-        <ProfileCard />
+        <ProfileCard resetAccount={resetAccount} />
       ) : (
         <LogInCard login={login} signup={signup} />
       )}
