@@ -185,9 +185,14 @@ export const ProfileCard = () => {
   return (
     <div
       className="flex flex-row rounded-lg bg-white p-10 dark:bg-[#0F172A]"
-      style={{ maxWidth: "100vw" }}
+      style={{ maxWidth: "95vw" }}
     >
-      <div className="flex flex-col gap-8">
+      <div
+        className="flex flex-col gap-8"
+        style={{
+          width: "100%",
+        }}
+      >
         <div className="flex justify-between">
           <div className="text-lg font-semibold">Welcome to your profile!</div>
           <button
@@ -216,8 +221,18 @@ export const ProfileCard = () => {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <div>Account address</div>
-            <div className="text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
-              {client?.account?.address}
+            <div className="flex gap-2">
+              <div className="overflow-hidden text-ellipsis text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
+                {client?.account?.address}
+              </div>
+              <button
+                className="transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+                onClick={() =>
+                  navigator.clipboard.writeText(client?.account?.address || "")
+                }
+              >
+                Copy
+              </button>
             </div>
           </div>
           <div className="flex flex-col gap-2">

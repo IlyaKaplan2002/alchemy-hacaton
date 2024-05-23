@@ -27,8 +27,8 @@ const ImportAccountPopup: FC<Props> = ({
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel
-          className="flex min-w-[400px] flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]"
-          style={{ maxWidth: "80vw" }}
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]"
+          style={{ maxWidth: "80vw", width: "80vw" }}
         >
           <DialogTitle className="font-bold">Import account</DialogTitle>
 
@@ -49,8 +49,17 @@ const ImportAccountPopup: FC<Props> = ({
             </p>
             <div className="flex flex-col gap-2">
               <div>New key</div>
-              <div className="text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
-                {address}
+
+              <div className="flex gap-2">
+                <div className="overflow-hidden text-ellipsis text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
+                  {address}
+                </div>
+                <button
+                  className="transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+                  onClick={() => navigator.clipboard.writeText(address || "")}
+                >
+                  Copy
+                </button>
               </div>
             </div>
 

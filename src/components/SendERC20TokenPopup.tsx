@@ -40,8 +40,8 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token }) => {
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel
-          className="flex min-w-[400px] flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0F172A]"
-          style={{ maxWidth: "80vw" }}
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0F172A]"
+          style={{ maxWidth: "80vw", width: "80vw" }}
         >
           <DialogTitle className="font-bold">
             Send {token?.symbol} token

@@ -20,7 +20,7 @@ const AddOwner = () => {
         <input
           className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
           type="text"
-          placeholder="Receiver address"
+          placeholder="New owner address"
           value={newOwnerAddress}
           onChange={(e) => setNewOwnerAddress(e.target.value)}
         />
