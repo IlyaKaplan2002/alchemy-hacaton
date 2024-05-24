@@ -19,7 +19,7 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
   } | null>(null);
 
   return (
-    <div className="flex min-w-80 flex-row justify-center rounded-lg bg-[#0F172A] bg-white p-10">
+    <div className="flex min-w-80 flex-row justify-center rounded-lg bg-white p-10 dark:bg-[#0F172A]">
       <div className="flex flex-col gap-8">
         <div className="text-[18px] font-semibold">
           Log in to the Embedded Accounts Demo!

@@ -27,31 +27,31 @@ const ImportAccountPopup: FC<Props> = ({
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel
-          className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0b1328] bg-white p-10 outline-none"
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]"
           style={{ maxWidth: "80vw", width: "80vw" }}
         >
           <DialogTitle className="font-bold">Import account</DialogTitle>
 
           <div className="flex flex-col justify-between gap-6">
-            <p className="text-gray-400 text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400">
               Step 1: Enter account address
             </p>
             <input
-              className="rounded-lg border border-[#475569] border-[#CBD5E1] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Account address"
               value={accountAddress}
               onChange={(e) => setAccountAddress(e.target.value)}
             />
 
-            <p className="text-gray-400 text-gray-500">
+            <p className="text-gray-500 dark:text-gray-400">
               Step 2: Approve new key in a previous account
             </p>
             <div className="flex flex-col gap-2">
               <div>New key</div>
 
               <div className="flex gap-2">
-                <div className="overflow-hidden text-ellipsis text-wrap rounded-lg bg-[#1F2937] p-3 text-[#CBD5E1]">
+                <div className="overflow-hidden text-ellipsis text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
                   {address}
                 </div>
                 <button
