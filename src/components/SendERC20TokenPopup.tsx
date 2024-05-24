@@ -40,7 +40,7 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel
-          className="flex flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0F172A]"
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0F172A] p-10 outline-none"
           style={{ maxWidth: "80vw", width: "80vw" }}
         >
           <DialogTitle className="font-bold">
@@ -49,14 +49,14 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
 
           <div className="flex flex-col justify-between gap-6">
             <input
-              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#475569] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
             <input
-              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#475569] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Receiver address"
               value={receiverAddress}
@@ -72,7 +72,7 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
                 <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
               </Switch>
 
-              <span className="text-sm text-gray-500 dark:text-gray-400">
+              <span className="text-sm text-gray-400">
                 {useGasManager ? "Use gas manager" : "Don't use gas manager"}
               </span>
             </div>
@@ -82,7 +82,7 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
                 href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"
+                className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 disabled:bg-[#4252C5]"
               >
                 View transaction details
               </a>
@@ -133,7 +133,7 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
                 >
                   {isSendingUserOperation ? (
                     <div
-                      className="text-surface inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                      className="text-surface inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] text-white motion-reduce:animate-[spin_1.5s_linear_infinite]"
                       role="status"
                     ></div>
                   ) : (

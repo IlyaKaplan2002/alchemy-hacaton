@@ -206,7 +206,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
 
   return (
     <div
-      className="flex flex-row rounded-lg bg-white p-10 dark:bg-[#0F172A]"
+      className="flex flex-row rounded-lg bg-[#0F172A] p-10"
       style={{ maxWidth: "95vw" }}
     >
       <div
@@ -221,7 +221,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           </ListboxButton>
           <ListboxOptions
             anchor="bottom"
-            className="w-[var(--button-width)] rounded-xl border border-white/5 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none dark:bg-[#0b1328]"
+            className="w-[var(--button-width)] rounded-xl border border-white/5 bg-[#0b1328] p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none"
           >
             {[polygonAmoy, sepolia].map((chain) => (
               <ListboxOption
@@ -264,7 +264,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           <div className="flex flex-col gap-2">
             <div>Account address</div>
             <div className="flex gap-2">
-              <div className="overflow-hidden text-ellipsis text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
+              <div className="overflow-hidden text-ellipsis text-wrap rounded-lg bg-[#1F2937] p-3 text-[#CBD5E1]">
                 {client?.account?.address}
               </div>
               <button
@@ -280,7 +280,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           <div className="flex flex-col gap-2">
             <div>Native balance</div>
             <div className="flex gap-2">
-              <div className="w-full text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
+              <div className="w-full text-wrap rounded-lg bg-[#1F2937] p-3 text-[#CBD5E1]">
                 {balance}
               </div>
               <button
@@ -295,7 +295,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
             <div className="flex flex-col gap-2" key={token.address}>
               <div>{token.symbol} balance</div>
               <div className="flex gap-2">
-                <div className="w-full text-wrap rounded-lg p-3 dark:bg-[#1F2937] dark:text-[#CBD5E1]">
+                <div className="w-full text-wrap rounded-lg bg-[#1F2937] p-3 text-[#CBD5E1]">
                   {token.balance}
                 </div>
 
@@ -314,7 +314,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           <div className="text-[18px] font-semibold">Import ERC20 token</div>
           <div className="flex flex-col justify-between gap-6">
             <input
-              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#475569] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Enter token address"
               value={tokenAddress}

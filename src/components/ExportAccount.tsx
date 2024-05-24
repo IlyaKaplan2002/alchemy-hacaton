@@ -7,7 +7,7 @@ const ExportAccount = () => {
     <div className="flex flex-col">
       {!isExported ? (
         <button
-          className="w-full transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 disabled:bg-[#C0D4FF] disabled:hover:scale-100 dark:disabled:bg-[#4252C5]"
+          className="w-full transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105  disabled:bg-[#4252C5] disabled:hover:scale-100"
           onClick={() => setIsExported(true)}
         >
           Show seed phrase

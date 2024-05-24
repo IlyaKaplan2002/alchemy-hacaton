@@ -38,21 +38,21 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose, chain }) => {
     >
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
         <DialogPanel
-          className="flex flex-col space-y-4 rounded-lg border border-none bg-white p-10 outline-none dark:bg-[#0b1328]"
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0b1328] p-10 outline-none"
           style={{ maxWidth: "80vw", width: "80vw" }}
         >
           <DialogTitle className="font-bold">Send native token</DialogTitle>
 
           <div className="flex flex-col justify-between gap-6">
             <input
-              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#475569] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
             <input
-              className="rounded-lg border border-[#CBD5E1] p-3 dark:border-[#475569] dark:bg-slate-700 dark:text-white dark:placeholder:text-[#E2E8F0]"
+              className="rounded-lg border border-[#475569] bg-slate-700 p-3 text-white placeholder:text-[#E2E8F0]"
               type="text"
               placeholder="Receiver address"
               value={receiverAddress}
@@ -78,7 +78,7 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose, chain }) => {
                 href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"
+                className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 disabled:bg-[#4252C5]"
               >
                 View transaction details
               </a>
@@ -123,7 +123,7 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose, chain }) => {
                 >
                   {isSendingUserOperation ? (
                     <div
-                      className="text-surface inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
+                      className="text-surface inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] text-white motion-reduce:animate-[spin_1.5s_linear_infinite]"
                       role="status"
                     ></div>
                   ) : (
