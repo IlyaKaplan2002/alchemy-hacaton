@@ -144,20 +144,25 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
         },
       ];
 
-      localStorage.setItem("importedTokens", JSON.stringify(newImportedTokens));
+      localStorage.setItem(
+        `importedTokens.${chain.id}`,
+        JSON.stringify(newImportedTokens),
+      );
 
       return newImportedTokens;
     });
     setTokenAddress("");
-  }, [client, tokenAddress]);
+  }, [chain.id, client, tokenAddress]);
 
   useEffect(() => {
-    const newImportedTokens = localStorage.getItem("importedTokens");
+    const newImportedTokens = localStorage.getItem(
+      `importedTokens.${chain.id}`,
+    );
 
     if (newImportedTokens) {
       setImportedTokens(JSON.parse(newImportedTokens));
     }
-  }, []);
+  }, [chain.id]);
 
   const getERC20Balances = useCallback(async () => {
     if (!client?.account?.address) return;
