@@ -1,9 +1,14 @@
-import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
-import { polygonAmoy } from "viem/chains";
-import { useAccount } from "@/hooks/useAccount";
-import { useState } from "react";
+import { FC, useState } from "react";
 
-const AddOwner = () => {
+import { Chain } from "viem/chains";
+import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
+import { useAccount } from "@/hooks/useAccount";
+
+interface Props {
+  chain: Chain;
+}
+
+const AddOwner: FC<Props> = ({ chain }) => {
   const [newOwnerAddress, setNewOwnerAddress] = useState("");
   const [isError, setIsError] = useState(false);
   const [sendUserOperationResult, setSendUserOperationResult] = useState<
@@ -68,9 +73,9 @@ const AddOwner = () => {
           ></div>
         )}
         {isError && "An error occurred. Try again!"}
-        {sendUserOperationResult && (
+        {sendUserOperationResult && chain.blockExplorers && (
           <a
-            href={`${polygonAmoy.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
+            href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"

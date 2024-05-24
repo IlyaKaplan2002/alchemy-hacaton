@@ -1,16 +1,16 @@
+import { Address, Chain } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { FC, useState } from "react";
 
-import { Address } from "viem";
-import { polygonAmoy } from "viem/chains";
 import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  chain: Chain;
 }
 
-const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose }) => {
+const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose, chain }) => {
   const [amount, setAmount] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
@@ -73,9 +73,9 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose }) => {
               </span>
             </div>
 
-            {sendUserOperationResult ? (
+            {sendUserOperationResult && chain.blockExplorers ? (
               <a
-                href={`${polygonAmoy.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
+                href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"

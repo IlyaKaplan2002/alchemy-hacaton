@@ -1,15 +1,15 @@
-import { Address, encodeFunctionData } from "viem";
+import { Address, Chain, encodeFunctionData } from "viem";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
 import { FC, useState } from "react";
 
-import { polygonAmoy } from "viem/chains";
 import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   token: IERC20Token;
+  chain: Chain;
 }
 
-const SendERC20Token: FC<Props> = ({ token }) => {
+const SendERC20Token: FC<Props> = ({ token, chain }) => {
   const [amount, setAmount] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
@@ -85,9 +85,9 @@ const SendERC20Token: FC<Props> = ({ token }) => {
           ></div>
         )}
         {isSendUserOperationError && "An error occurred. Try again!"}
-        {sendUserOperationResult && (
+        {sendUserOperationResult && chain.blockExplorers && (
           <a
-            href={`${polygonAmoy.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
+            href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"

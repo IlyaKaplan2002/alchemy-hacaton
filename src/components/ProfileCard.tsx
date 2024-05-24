@@ -1,8 +1,16 @@
 "use client";
 
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useState } from "react";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from "@headlessui/react";
+import { polygonAmoy, sepolia } from "@alchemy/aa-core";
 
 import AddOwner from "./AddOwner";
+import { ChainContext } from "@/app/providers";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
 import { useAccount } from "@/hooks/useAccount";
@@ -103,6 +111,11 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
   );
   const [isNativeTokenDialogOpen, setIsNativeTokenDialogOpen] = useState(false);
 
+  const chainContext = useContext(ChainContext);
+
+  const chain = chainContext?.chain || polygonAmoy;
+  const setChain = chainContext?.setChain || (() => {});
+
   const { client } = useAccount({ useGasManager: false });
 
   const handleImportToken = useCallback(async () => {
@@ -197,6 +210,26 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           width: "100%",
         }}
       >
+        <Listbox value={chain} onChange={setChain}>
+          <ListboxButton className="relative block w-full rounded-lg bg-white/5 py-1.5 pl-3 pr-8 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25">
+            {chain.name}
+          </ListboxButton>
+          <ListboxOptions
+            anchor="bottom"
+            className="w-[var(--button-width)] rounded-xl border border-white/5 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none dark:bg-[#0b1328]"
+          >
+            {[polygonAmoy, sepolia].map((chain) => (
+              <ListboxOption
+                key={chain.id}
+                value={chain}
+                className="group flex cursor-default select-none items-center gap-2 rounded-lg px-3 py-1.5 data-[focus]:bg-white/10"
+              >
+                {chain.name}
+              </ListboxOption>
+            ))}
+          </ListboxOptions>
+        </Listbox>
+
         <div className="flex justify-between">
           <div className="text-lg font-semibold">Welcome to your profile!</div>
           <button
@@ -301,14 +334,16 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
           isOpen={!!erc20DialogToken}
           onClose={() => setERC20DialogToken(null)}
           token={erc20DialogToken}
+          chain={chain}
         />
 
         <SendNativeTokenPopup
           isOpen={isNativeTokenDialogOpen}
           onClose={() => setIsNativeTokenDialogOpen(false)}
+          chain={chain}
         />
 
-        <AddOwner />
+        <AddOwner chain={chain} />
 
         <button
           className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"

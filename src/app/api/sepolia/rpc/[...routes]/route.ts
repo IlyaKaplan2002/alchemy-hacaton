@@ -2,15 +2,15 @@ import { NextResponse } from "next/server";
 
 export async function POST(
   req: Request,
-  { params }: { params: { routes: string[] } }
+  { params }: { params: { routes: string[] } },
 ) {
   const apiUrl = "https://api.g.alchemy.com";
-  const apiKey = process.env.ALCHEMY_API_KEY;
+  const apiKey = process.env.SEPOLIA_ALCHEMY_API_KEY;
 
   if (apiKey == null) {
     return NextResponse.json(
       { error: "ALCHEMY_API_KEY is not set" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 

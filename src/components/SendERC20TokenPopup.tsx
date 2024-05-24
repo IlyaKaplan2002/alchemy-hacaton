@@ -1,18 +1,18 @@
-import { Address, encodeFunctionData } from "viem";
+import { Address, Chain, encodeFunctionData } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
 import { FC, useState } from "react";
 
-import { polygonAmoy } from "viem/chains";
 import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
   token: IERC20Token | null;
+  chain: Chain;
 }
 
-const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token }) => {
+const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
   const [amount, setAmount] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
@@ -77,9 +77,9 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token }) => {
               </span>
             </div>
 
-            {sendUserOperationResult ? (
+            {sendUserOperationResult && chain.blockExplorers ? (
               <a
-                href={`${polygonAmoy.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
+                href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"

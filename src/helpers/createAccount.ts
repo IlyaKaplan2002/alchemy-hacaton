@@ -35,26 +35,33 @@ export const createClient = async ({
   mnemonic,
   bundlerClient,
   accountAddress,
+  chain,
   useGasManager,
 }: {
   mnemonic: string;
   bundlerClient: ClientWithAlchemyMethods;
+  chain: Chain;
   accountAddress?: `0x${string}`;
   useGasManager?: boolean;
 }) => {
-  const chain = polygonAmoy;
-
-  const rpcTransport = http("/api/rpc");
+  const rpcTransport = http(
+    chain.id === polygonAmoy.id ? "/api/amoy/rpc" : "/ap/sepolia/rpc",
+  );
 
   const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
 
-  const config = useGasManager
+  const config: CreateAlchemySmartAccountClientFromRpcClient = useGasManager
     ? {
         opts: {
           txMaxRetries: 20,
         },
         gasManagerConfig: {
-          policyId: process.env.NEXT_PUBLIC_ALCHEMY_GAS_MANAGER_POLICY_ID!,
+          policyId:
+            chain.id === polygonAmoy.id
+              ? (process.env
+                  .NEXT_PUBLIC_AMOY_ALCHEMY_GAS_MANAGER_POLICY_ID as string)
+              : (process.env
+                  .NEXT_PUBLIC_SEPOLIA_ALCHEMY_GAS_MANAGER_POLICY_ID as string),
         },
         account: await createMultiOwnerModularAccount({
           transport: rpcTransport,

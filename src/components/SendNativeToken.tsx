@@ -1,9 +1,13 @@
-import { Address } from "viem";
-import { polygonAmoy } from "viem/chains";
-import { useAccount } from "@/hooks/useAccount";
-import { useState } from "react";
+import { Address, Chain } from "viem";
+import { FC, useState } from "react";
 
-const SendNativeToken = () => {
+import { useAccount } from "@/hooks/useAccount";
+
+interface Props {
+  chain: Chain;
+}
+
+const SendNativeToken: FC<Props> = ({ chain }) => {
   const [amount, setAmount] = useState("");
   const [receiverAddress, setReceiverAddress] = useState("");
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
@@ -74,9 +78,9 @@ const SendNativeToken = () => {
           ></div>
         )}
         {isSendUserOperationError && "An error occurred. Try again!"}
-        {sendUserOperationResult && (
+        {sendUserOperationResult && chain.blockExplorers && (
           <a
-            href={`${polygonAmoy.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
+            href={`${chain.blockExplorers.default.url}/tx/${sendUserOperationResult}`}
             target="_blank"
             rel="noopener noreferrer"
             className="w-full transform rounded-lg bg-[#363FF9] p-3 text-center font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105 dark:disabled:bg-[#4252C5]"

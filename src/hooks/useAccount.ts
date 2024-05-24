@@ -1,7 +1,9 @@
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
 import { createClient, createMnemonic } from "@/helpers/createAccount";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
+import { ChainContext } from "@/app/providers";
+import { polygonAmoy } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 
 interface Props {
@@ -12,6 +14,10 @@ export const useAccount = ({ useGasManager }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [client, setClient] = useState<SmartAccountClient | null>(null);
   const bundlerClient = useBundlerClient();
+
+  const chainData = useContext(ChainContext);
+
+  const chain = chainData?.chain || polygonAmoy;
 
   const login = useCallback(async () => {
     setIsLoading(true);
@@ -25,13 +31,14 @@ export const useAccount = ({ useGasManager }: Props) => {
       const client = await createClient({
         mnemonic,
         bundlerClient,
+        chain,
         accountAddress: (accountAddress as `0x${string}`) || undefined,
         useGasManager,
       });
       setClient(client);
     }
     setIsLoading(false);
-  }, [bundlerClient, useGasManager]);
+  }, [bundlerClient, chain, useGasManager]);
 
   const importAccount = useCallback(async () => {
     const mnemonic = createMnemonic();
@@ -51,11 +58,11 @@ export const useAccount = ({ useGasManager }: Props) => {
     const mnemonic = createMnemonic();
     console.log(mnemonic);
     localStorage.setItem("mnemonic", mnemonic);
-    const client = await createClient({ mnemonic, bundlerClient });
+    const client = await createClient({ mnemonic, bundlerClient, chain });
     setClient(client);
 
     setIsLoading(false);
-  }, [bundlerClient]);
+  }, [bundlerClient, chain]);
 
   const resetAccount = useCallback(() => {
     localStorage.removeItem("mnemonic");
