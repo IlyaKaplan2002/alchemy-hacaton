@@ -8,8 +8,7 @@
   --background-end-rgb: 255, 255, 255;
 
 
-  color-scheme: only dark;
-
+  color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
