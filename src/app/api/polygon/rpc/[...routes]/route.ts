@@ -5,7 +5,7 @@ export async function POST(
   { params }: { params: { routes: string[] } },
 ) {
   const apiUrl = "https://api.g.alchemy.com";
-  const apiKey = process.env.SEPOLIA_ALCHEMY_API_KEY;
+  const apiKey = process.env.POLYGON_ALCHEMY_API_KEY;
 
   if (apiKey == null) {
     return NextResponse.json(

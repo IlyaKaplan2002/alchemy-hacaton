@@ -3,7 +3,7 @@ import { createClient, createMnemonic } from "@/helpers/createAccount";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 import { ChainContext } from "@/app/providers";
-import { polygonAmoy } from "viem/chains";
+import { polygon } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 
 interface Props {
@@ -17,7 +17,7 @@ export const useAccount = ({ useGasManager }: Props) => {
 
   const chainData = useContext(ChainContext);
 
-  const chain = chainData?.chain || polygonAmoy;
+  const chain = chainData?.chain || polygon;
 
   const login = useCallback(async () => {
     setIsLoading(true);

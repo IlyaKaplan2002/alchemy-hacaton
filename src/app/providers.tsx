@@ -13,7 +13,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AlchemyAccountProvider } from "@alchemy/aa-alchemy/react";
 import { Chain } from "viem";
 import { createConfig } from "@alchemy/aa-alchemy/config";
-import { polygonAmoy } from "@alchemy/aa-core";
+import { polygon } from "@alchemy/aa-core";
 
 export const ChainContext = createContext<{
   chain: Chain;
@@ -21,11 +21,11 @@ export const ChainContext = createContext<{
 } | null>(null);
 
 export const Providers = (props: PropsWithChildren) => {
-  const [chain, setChain] = useState<Chain>(polygonAmoy);
+  const [chain, setChain] = useState<Chain>(polygon);
 
   const queryClient = new QueryClient();
   const config = createConfig({
-    rpcUrl: chain.id === polygonAmoy.id ? "/api/amoy/rpc" : "/api/sepolia/rpc",
+    rpcUrl: chain.id === polygon.id ? "/api/polygon/rpc" : "/api/arbitrum/rpc",
     chain,
   });
 

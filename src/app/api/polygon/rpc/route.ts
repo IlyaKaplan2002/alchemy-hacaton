@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
+import { polygon } from "@alchemy/aa-core";
 
-export async function POST(
-  req: Request,
-  { params }: { params: { routes: string[] } },
-) {
-  const apiUrl = "https://api.g.alchemy.com";
-  const apiKey = process.env.AMOY_ALCHEMY_API_KEY;
+export async function POST(req: Request) {
+  const rpcUrl = polygon.rpcUrls.alchemy.http[0];
+  const apiKey = process.env.POLYGON_ALCHEMY_API_KEY;
 
   if (apiKey == null) {
     return NextResponse.json(
@@ -16,10 +14,9 @@ export async function POST(
 
   const body = await req.json();
 
-  const res = await fetch(apiUrl + `/${params.routes.join("/")}`, {
+  const res = await fetch(`${rpcUrl}/${apiKey}`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${apiKey}`,
       ...req.headers,
     },
     body: JSON.stringify(body),
