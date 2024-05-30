@@ -14,6 +14,7 @@ import { ChainContext } from "@/app/providers";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
 import { useAccount } from "@/hooks/useAccount";
+import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 export const ERC20_ABI = [
   {
@@ -110,6 +111,10 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
     null,
   );
   const [isNativeTokenDialogOpen, setIsNativeTokenDialogOpen] = useState(false);
+
+  const [initDataUnsafe, initData] = useInitData();
+
+  console.log(initDataUnsafe, initData, "initDataUnsafe, initData");
 
   const chainContext = useContext(ChainContext);
 
