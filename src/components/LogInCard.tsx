@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 
 import ImportAccountPopup from "./ImportAccountPopup";
 import { useAccount } from "@/hooks/useAccount";
+import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 interface Props {
   login: () => Promise<void>;
@@ -12,6 +13,10 @@ interface Props {
 
 export const LogInCard: FC<Props> = ({ login, signup }) => {
   const { importAccount } = useAccount({ useGasManager: false });
+
+  const [initDataUnsafe, initData] = useInitData();
+
+  console.log(initDataUnsafe, initData, "initDataUnsafe, initData");
 
   const [keyData, setKeyData] = useState<{
     address: string;

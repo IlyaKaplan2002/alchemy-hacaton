@@ -84,8 +84,6 @@ export const createClient = async ({
         client: bundlerClient,
       };
 
-  console.log(config);
-
   const client = createAlchemySmartAccountClientFromRpcClient(config);
 
   if (!client.account) return null;

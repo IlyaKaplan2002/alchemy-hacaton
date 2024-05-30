@@ -22,12 +22,9 @@ export const useAccount = ({ useGasManager }: Props) => {
   const login = useCallback(async () => {
     setIsLoading(true);
 
-    console.log("here");
-
     const mnemonic = localStorage.getItem("mnemonic");
     const accountAddress = localStorage.getItem("accountAddress");
     if (mnemonic) {
-      console.log(useGasManager);
       const client = await createClient({
         mnemonic,
         bundlerClient,
@@ -56,7 +53,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     setIsLoading(true);
 
     const mnemonic = createMnemonic();
-    console.log(mnemonic);
+
     localStorage.setItem("mnemonic", mnemonic);
     const client = await createClient({ mnemonic, bundlerClient, chain });
     setClient(client);
