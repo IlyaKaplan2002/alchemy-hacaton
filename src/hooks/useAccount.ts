@@ -11,6 +11,7 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { polygonAmoy } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
+import { useWhyDidYouUpdate } from "ahooks";
 
 interface Props {
   useGasManager: boolean;
@@ -96,7 +97,16 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
 
     setIsLoading(false);
-  }, [bundlerClient, chain, initData, initDataUnsafe, useGasManager]);
+  }, [bundlerClient, chain, initData, initDataUnsafe, setUser, useGasManager]);
+
+  useWhyDidYouUpdate("useAccount", {
+    bundlerClient,
+    chain,
+    initData,
+    initDataUnsafe,
+    setUser,
+    useGasManager,
+  });
 
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
     const { mnemonic, address } = await createMnemonic();
