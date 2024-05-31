@@ -222,7 +222,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
       className="w-full rounded-lg bg-[#0F172A] p-10"
       style={{ maxWidth: "95vw" }}
     >
-      <TabList className="mb-5 ml-auto mr-auto w-fit">
+      <TabList className="mb-5 ml-auto mr-auto flex w-fit">
         <Tab as={Fragment}>
           {({ hover, selected }) => (
             <button
