@@ -97,7 +97,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
 
     setIsLoading(false);
-  }, [chain, initData, initDataUnsafe, setUser, useGasManager]);
+  }, [chain, initData, initDataUnsafe, useGasManager]);
 
   useWhyDidYouUpdate("useAccount", {
     bundlerClient,
