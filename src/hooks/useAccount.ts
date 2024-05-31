@@ -20,17 +20,18 @@ export const useAccount = ({ useGasManager }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [client, setClient] = useState<SmartAccountClient | null>(null);
   const [owners, setOwners] = useState<`0x${string}`[]>([]);
+  const [isOwner, setIsOwner] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
   const bundlerClient = useBundlerClient();
 
-  const isOwner = useMemo(
-    () =>
+  useEffect(() => {
+    setIsOwner(
       owners.includes(localStorage.getItem("accountOwner") as `0x${string}`) ||
-      localStorage.getItem("isOwner") === "true",
-    [owners],
-  );
+        localStorage.getItem("isOwner") === "true",
+    );
+  }, [owners]);
 
   const chainData = useContext(ChainContext);
   const userData = useContext(UserContext);
