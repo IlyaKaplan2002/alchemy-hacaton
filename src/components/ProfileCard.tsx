@@ -7,7 +7,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import { arbitrum, polygon } from "@alchemy/aa-core";
+import { polygonAmoy, sepolia } from "@alchemy/aa-core";
 
 import AddOwner from "./AddOwner";
 import { ChainContext } from "@/app/providers";
@@ -124,7 +124,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
 
   const chainContext = useContext(ChainContext);
 
-  const chain = chainContext?.chain || polygon;
+  const chain = chainContext?.chain || polygonAmoy;
   const setChain = chainContext?.setChain || (() => {});
 
   const { client } = useAccount({ useGasManager: false });
@@ -234,7 +234,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
             anchor="bottom"
             className="w-[var(--button-width)] rounded-xl border border-white/5 bg-[#0b1328] p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none"
           >
-            {[polygon, arbitrum].map((chain) => (
+            {[polygonAmoy, sepolia].map((chain) => (
               <ListboxOption
                 key={chain.id}
                 value={chain}

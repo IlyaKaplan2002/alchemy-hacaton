@@ -25,7 +25,7 @@ import {
 } from "@alchemy/aa-accounts";
 import { english, generateMnemonic } from "viem/accounts";
 
-import { polygon } from "viem/chains";
+import { polygonAmoy } from "viem/chains";
 
 export const createMnemonic = async () => {
   const mnemonic = generateMnemonic(english);
@@ -49,7 +49,7 @@ export const createClient = async ({
   useGasManager?: boolean;
 }) => {
   const rpcTransport = http(
-    chain.id === polygon.id ? "/api/polygon/rpc" : "/api/arbitrum/rpc",
+    chain.id === polygonAmoy.id ? "/api/amoy/rpc" : "/api/sepolia/rpc",
   );
 
   const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
@@ -61,11 +61,11 @@ export const createClient = async ({
         },
         gasManagerConfig: {
           policyId:
-            chain.id === polygon.id
+            chain.id === polygonAmoy.id
               ? (process.env
-                  .NEXT_PUBLIC_POLYGON_ALCHEMY_GAS_MANAGER_POLICY_ID as string)
+                  .NEXT_PUBLIC_AMOY_ALCHEMY_GAS_MANAGER_POLICY_ID as string)
               : (process.env
-                  .NEXT_PUBLIC_ARBITRUM_ALCHEMY_GAS_MANAGER_POLICY_ID as string),
+                  .NEXT_PUBLIC_SEPOLIA_ALCHEMY_GAS_MANAGER_POLICY_ID as string),
         },
         account: await createMultiOwnerModularAccount({
           transport: rpcTransport,

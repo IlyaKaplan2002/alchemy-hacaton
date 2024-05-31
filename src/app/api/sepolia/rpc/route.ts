@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { arbitrum } from "@alchemy/aa-core";
+import { sepolia } from "@alchemy/aa-core";
 
 export async function POST(req: Request) {
-  const rpcUrl = arbitrum.rpcUrls.alchemy.http[0];
-  const apiKey = process.env.ARBITRUM_ALCHEMY_API_KEY;
+  const rpcUrl = sepolia.rpcUrls.alchemy.http[0];
+  const apiKey = process.env.SEPOLIA_ALCHEMY_API_KEY;
 
   if (apiKey == null) {
     return NextResponse.json(

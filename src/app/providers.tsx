@@ -15,7 +15,7 @@ import { Chain } from "viem";
 import { IUser } from "@/api/apiService";
 import { WebAppProvider } from "@vkruglikov/react-telegram-web-app";
 import { createConfig } from "@alchemy/aa-alchemy/config";
-import { polygon } from "@alchemy/aa-core";
+import { polygonAmoy } from "@alchemy/aa-core";
 
 export const ChainContext = createContext<{
   chain: Chain;
@@ -28,12 +28,12 @@ export const UserContext = createContext<{
 } | null>(null);
 
 export const Providers = (props: PropsWithChildren) => {
-  const [chain, setChain] = useState<Chain>(polygon);
+  const [chain, setChain] = useState<Chain>(polygonAmoy);
   const [user, setUser] = useState<IUser | null>(null);
 
   const queryClient = new QueryClient();
   const config = createConfig({
-    rpcUrl: chain.id === polygon.id ? "/api/polygon/rpc" : "/api/arbitrum/rpc",
+    rpcUrl: chain.id === polygonAmoy.id ? "/api/amoy/rpc" : "/api/sepolia/rpc",
     chain,
   });
 
