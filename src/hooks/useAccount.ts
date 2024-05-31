@@ -3,6 +3,7 @@ import { createClient, createMnemonic } from "@/helpers/createAccount";
 import { useCallback, useContext, useEffect, useState } from "react";
 
 import { ChainContext } from "@/app/providers";
+import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { polygon } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 
@@ -13,6 +14,10 @@ interface Props {
 export const useAccount = ({ useGasManager }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
+
+  console.log(isOwner, "isOwner");
+
   const bundlerClient = useBundlerClient();
 
   const chainData = useContext(ChainContext);
@@ -23,8 +28,17 @@ export const useAccount = ({ useGasManager }: Props) => {
     setIsLoading(true);
 
     const mnemonic = localStorage.getItem("mnemonic");
+
     const accountAddress = localStorage.getItem("accountAddress");
     if (mnemonic) {
+      if (!localStorage.getItem("accountOwner")) {
+        const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
+
+        const address = await signer.getAddress();
+
+        localStorage.setItem("accountOwner", address);
+      }
+
       const client = await createClient({
         mnemonic,
         bundlerClient,
@@ -37,24 +51,59 @@ export const useAccount = ({ useGasManager }: Props) => {
     setIsLoading(false);
   }, [bundlerClient, chain, useGasManager]);
 
-  const importAccount = useCallback(async () => {
-    const mnemonic = createMnemonic();
+  const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
+    const { mnemonic, address } = await createMnemonic();
 
-    const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
+    localStorage.setItem("accountAddress", accountAddress);
+    localStorage.setItem("mnemonic", mnemonic);
+    localStorage.setItem("accountOwner", address);
 
-    return { address: await signer.getAddress(), mnemonic };
+    return { address, mnemonic };
   }, []);
 
   useEffect(() => {
     login();
   }, [login]);
 
+  const getIsOwner = useCallback(async () => {
+    if (client && localStorage.getItem("accountOwner")) {
+      const pluginActionExtendedClient = client.extend(multiOwnerPluginActions);
+
+      if (!pluginActionExtendedClient || !client.account) {
+        return;
+      }
+
+      console.log({
+        account: client.account,
+        address: localStorage.getItem("accountOwner") as `0x${string}`,
+      });
+
+      const owners = await pluginActionExtendedClient.readOwners({
+        account: client.account,
+      });
+
+      console.log(owners, "owners");
+
+      const isOwner = await pluginActionExtendedClient.isOwnerOf({
+        account: client.account,
+        address: localStorage.getItem("accountOwner") as `0x${string}`,
+      });
+
+      setIsOwner(isOwner);
+    }
+  }, [client]);
+
+  useEffect(() => {
+    getIsOwner();
+  }, [getIsOwner]);
+
   const signup = useCallback(async () => {
     setIsLoading(true);
 
-    const mnemonic = createMnemonic();
+    const { mnemonic, address } = await createMnemonic();
 
     localStorage.setItem("mnemonic", mnemonic);
+    localStorage.setItem("accountOwner", address);
     const client = await createClient({ mnemonic, bundlerClient, chain });
     setClient(client);
 
@@ -67,5 +116,13 @@ export const useAccount = ({ useGasManager }: Props) => {
     setClient(null);
   }, []);
 
-  return { client, isLoading, login, signup, importAccount, resetAccount };
+  return {
+    client,
+    isLoading,
+    login,
+    signup,
+    importAccount,
+    resetAccount,
+    isOwner,
+  };
 };

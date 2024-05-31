@@ -66,6 +66,7 @@ const ImportAccountPopup: FC<Props> = ({
               onClick={async () => {
                 localStorage.setItem("accountAddress", accountAddress);
                 localStorage.setItem("mnemonic", mnemonic);
+                localStorage.setItem("accountOwner", address);
                 onClose();
                 login();
               }}

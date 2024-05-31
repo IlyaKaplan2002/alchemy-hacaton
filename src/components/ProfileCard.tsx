@@ -13,6 +13,7 @@ import AddOwner from "./AddOwner";
 import { ChainContext } from "@/app/providers";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
+import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
@@ -112,9 +113,14 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
   );
   const [isNativeTokenDialogOpen, setIsNativeTokenDialogOpen] = useState(false);
 
-  const [initDataUnsafe, initData] = useInitData();
+  // const [initDataUnsafe, initData] = useInitData();
 
-  console.log(initDataUnsafe, initData, "initDataUnsafe, initData");
+  // console.log(initDataUnsafe, initData, "initDataUnsafe, initData");
+
+  // const parser = new UAParser();
+  // const result = parser.getResult();
+
+  // console.log(result, "result");
 
   const chainContext = useContext(ChainContext);
 

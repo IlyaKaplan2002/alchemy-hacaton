@@ -27,8 +27,12 @@ import { english, generateMnemonic } from "viem/accounts";
 
 import { polygon } from "viem/chains";
 
-export const createMnemonic = () => {
-  return generateMnemonic(english);
+export const createMnemonic = async () => {
+  const mnemonic = generateMnemonic(english);
+
+  const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
+
+  return { mnemonic, address: await signer.getAddress() };
 };
 
 export const createClient = async ({
