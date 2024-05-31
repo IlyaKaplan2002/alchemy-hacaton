@@ -1,3 +1,5 @@
+"use client";
+
 import { Address, Chain, encodeFunctionData } from "viem";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
 import { FC, useState } from "react";

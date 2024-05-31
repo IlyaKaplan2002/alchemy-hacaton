@@ -1,3 +1,5 @@
+"use client";
+
 import { Address, Chain } from "viem";
 import { FC, useState } from "react";
 

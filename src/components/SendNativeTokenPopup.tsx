@@ -1,3 +1,5 @@
+"use client";
+
 import { Address, Chain } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { FC, useState } from "react";

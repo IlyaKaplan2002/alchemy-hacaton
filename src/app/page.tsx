@@ -5,14 +5,14 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
 
 export default function Home() {
-  const { client, isLoading, login, signup, resetAccount } = useAccount({
-    useGasManager: false,
-  });
+  const { client, isLoading, login, signup, resetAccount, isOwner } =
+    useAccount({
+      useGasManager: false,
+    });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
       {isLoading ? (
-        // Loading spinner
         <div className="flex items-center justify-center">
           <div
             className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
@@ -20,7 +20,18 @@ export default function Home() {
           ></div>
         </div>
       ) : client ? (
-        <ProfileCard resetAccount={resetAccount} />
+        isOwner ? (
+          <ProfileCard resetAccount={resetAccount} />
+        ) : (
+          <div
+            className="flex min-w-80 flex-row justify-center rounded-lg bg-[#0F172A] p-10"
+            style={{ maxWidth: "95vw" }}
+          >
+            <div className="text-center text-[18px] font-semibold">
+              Please approve this device on the previous device
+            </div>
+          </div>
+        )
       ) : (
         <LogInCard login={login} signup={signup} />
       )}

@@ -1,8 +1,9 @@
 "use client";
 
 import { FC, useCallback, useEffect, useState } from "react";
-import { IUser, getUsersMany } from "@/api/apiService";
+import { IUser, addDevice, getUsersMany } from "@/api/apiService";
 
+import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
@@ -60,20 +61,44 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
             Create a new account
           </button>
 
-          <div className="text-[18px] font-semibold">
-            Import an existing account:
-          </div>
+          {availableAccounts.length > 0 && (
+            <div className="text-[18px] font-semibold">
+              Import an existing account:
+            </div>
+          )}
 
-          <button
-            className="w-full transform overflow-hidden text-ellipsis rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
-            style={{ width: "100%" }}
-            onClick={async () => {
-              await importAccount("0xedAf280B9AC25d72e7B5cf70CBb147f13201fc52");
-              await login();
-            }}
-          >
-            0xedAf280B9AC25d72e7B5cf70CBb147f13201fc52
-          </button>
+          {availableAccounts.map((account) => (
+            <button
+              key={account.id}
+              className="w-full transform overflow-hidden text-ellipsis rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+              style={{ width: "100%" }}
+              onClick={async () => {
+                const { address } = await importAccount(account.accountAddress);
+                await login();
+
+                if (!initData || !initDataUnsafe) return;
+
+                const parser = new UAParser();
+                const result = parser.getResult();
+
+                try {
+                  await addDevice({
+                    telegramData: {
+                      initData,
+                      initDataUnsafe,
+                    },
+                    data: {
+                      deviceName: `${result.device.vendor} ${result.device.model}`,
+                      publicKey: address,
+                      accountAddress: account.accountAddress,
+                    },
+                  });
+                } catch (error) {}
+              }}
+            >
+              {account.accountAddress}
+            </button>
+          ))}
         </div>
       </div>
     </div>

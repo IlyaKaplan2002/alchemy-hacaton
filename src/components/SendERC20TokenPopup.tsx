@@ -1,3 +1,5 @@
+"use client";
+
 import { Address, Chain, encodeFunctionData } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
