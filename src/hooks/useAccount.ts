@@ -96,7 +96,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
 
     setIsLoading(false);
-  }, [bundlerClient, chain, initData, initDataUnsafe, setUser, useGasManager]);
+  }, [bundlerClient, chain, initData, initDataUnsafe, useGasManager]);
 
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
     const { mnemonic, address } = await createMnemonic();
