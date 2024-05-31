@@ -30,6 +30,13 @@ export default function Home() {
             <div className="text-center text-[18px] font-semibold">
               Please approve this device on the previous device
             </div>
+
+            <button
+              className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+              onClick={resetAccount}
+            >
+              Reset Account
+            </button>
           </div>
         )
       ) : (
