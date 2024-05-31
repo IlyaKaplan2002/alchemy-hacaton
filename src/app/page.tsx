@@ -24,7 +24,7 @@ export default function Home() {
           <ProfileCard resetAccount={resetAccount} />
         ) : (
           <div
-            className="flex min-w-80 flex-row justify-center rounded-lg bg-[#0F172A] p-10"
+            className="flex min-w-80 flex-col justify-center rounded-lg bg-[#0F172A] p-10"
             style={{ maxWidth: "95vw" }}
           >
             <div className="text-center text-[18px] font-semibold">
@@ -35,7 +35,7 @@ export default function Home() {
               className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
               onClick={resetAccount}
             >
-              Reset Account
+              Go Back
             </button>
           </div>
         )
