@@ -148,7 +148,11 @@ export const useAccount = ({ useGasManager }: Props) => {
         account: client.account,
       });
 
-      setOwners(owners as `0x${string}`[]);
+      setOwners(
+        owners.length
+          ? (owners as `0x${string}`[])
+          : [localStorage.getItem("accountOwner") as `0x${string}`],
+      );
     }
   }, [client]);
 
