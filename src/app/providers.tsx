@@ -33,7 +33,10 @@ export const Providers = (props: PropsWithChildren) => {
 
   const queryClient = new QueryClient();
   const config = createConfig({
-    rpcUrl: chain.id === polygonAmoy.id ? "/api/amoy/rpc" : "/api/sepolia/rpc",
+    rpcUrl:
+      chain.id === polygonAmoy.id
+        ? "https://rpc.ankr.com/polygon_amoy"
+        : "https://rpc.ankr.com/eth_sepolia",
     chain,
   });
 
