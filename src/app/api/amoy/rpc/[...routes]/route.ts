@@ -16,6 +16,8 @@ export async function POST(
 
   const body = await req.json();
 
+  console.log(params.routes);
+
   const res = await fetch(apiUrl + `/${params.routes.join("/")}`, {
     method: "POST",
     headers: {
