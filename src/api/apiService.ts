@@ -58,3 +58,15 @@ export const addDevice = async (
 ): Promise<AxiosResponse<IUser>> => {
   return axiosInstance.post("/user/add-device", data);
 };
+
+export const deleteDevice = async (
+  data: IRequest<IGetUserDto>,
+): Promise<AxiosResponse<IUser>> => {
+  return axiosInstance.post("/user/delete-device", data);
+};
+
+export const deleteUser = async (
+  data: IRequest<IGetUserDto>,
+): Promise<AxiosResponse<IUser>> => {
+  return axiosInstance.post("/user/delete", data);
+};

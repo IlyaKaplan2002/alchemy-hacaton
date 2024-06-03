@@ -110,9 +110,10 @@ export interface IERC20Token {
 
 interface Props {
   resetAccount: () => void;
+  exitAccount: () => void;
 }
 
-export const ProfileCard: FC<Props> = ({ resetAccount }) => {
+export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
   const [balance, setBalance] = useState(0);
   const [tokenAddress, setTokenAddress] = useState("");
   const [importedTokens, setImportedTokens] = useState<IERC20Token[]>([]);
@@ -388,12 +389,21 @@ export const ProfileCard: FC<Props> = ({ resetAccount }) => {
 
           {/* <AddOwner chain={chain} /> */}
 
-          <button
-            className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
-            onClick={resetAccount}
-          >
-            Reset Account
-          </button>
+          <div className="flex">
+            <button
+              className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+              onClick={exitAccount}
+            >
+              Exit
+            </button>
+
+            <button
+              className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
+              onClick={resetAccount}
+            >
+              Delete Account
+            </button>
+          </div>
         </TabPanel>
         <TabPanel
           className="flex flex-col gap-8"

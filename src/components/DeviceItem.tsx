@@ -1,9 +1,11 @@
 "use client";
 
 import { FC, useState } from "react";
+import { IDevice, IUser, deleteDevice } from "@/api/apiService";
+import { InitData, InitDataUnsafe } from "@vkruglikov/react-telegram-web-app";
 
 import { Chain } from "viem";
-import { IDevice } from "@/api/apiService";
+import { UAParser } from "ua-parser-js";
 import clsx from "clsx";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { useAccount } from "@/hooks/useAccount";
@@ -13,9 +15,22 @@ interface Props {
   chain: Chain;
   owners: `0x${string}`[];
   getOwners: () => Promise<void>;
+  initData: InitData;
+  initDataUnsafe: InitDataUnsafe;
+  setUserData: (data: IUser) => void;
+  accountAddress: `0x${string}` | null;
 }
 
-const DeviceItem: FC<Props> = ({ device, chain, owners, getOwners }) => {
+const DeviceItem: FC<Props> = ({
+  device,
+  chain,
+  owners,
+  getOwners,
+  initData,
+  initDataUnsafe,
+  setUserData,
+  accountAddress,
+}) => {
   const [isError, setIsError] = useState(false);
   const [sendUserOperationResult, setSendUserOperationResult] = useState<
     null | any
@@ -65,6 +80,25 @@ const DeviceItem: FC<Props> = ({ device, chain, owners, getOwners }) => {
                     result,
                   );
                 setSendUserOperationResult(txHash);
+
+                if (!isOwner && accountAddress) {
+                  const parser = new UAParser();
+                  const result = parser.getResult();
+
+                  const { data: userData } = await deleteDevice({
+                    telegramData: {
+                      initData,
+                      initDataUnsafe,
+                    },
+                    data: {
+                      publicKey: device.publicKey,
+                      deviceName: `${result.device.vendor} ${result.device.model}`,
+                      accountAddress,
+                    },
+                  });
+
+                  setUserData(userData);
+                }
 
                 await getOwners();
               } catch (error) {

@@ -19,8 +19,6 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
 
   const [initDataUnsafe, initData] = useInitData();
 
-  console.log(initDataUnsafe, initData, "initDataUnsafe, initData");
-
   const getAvailableAccounts = useCallback(async () => {
     if (!initData || !initDataUnsafe) return;
 
@@ -41,6 +39,39 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
   useEffect(() => {
     getAvailableAccounts();
   }, [getAvailableAccounts]);
+
+  const loginDevice = useCallback(
+    async (account: IUser) => {
+      const { address } = await importAccount(account.accountAddress);
+      await login();
+
+      if (!initData || !initDataUnsafe) return;
+
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      try {
+        await addDevice({
+          telegramData: {
+            initData,
+            initDataUnsafe,
+          },
+          data: {
+            deviceName: `${result.device.vendor} ${result.device.model}`,
+            publicKey: address,
+            accountAddress: account.accountAddress,
+          },
+        });
+      } catch (error) {}
+    },
+    [initData, initDataUnsafe, importAccount, login],
+  );
+
+  useEffect(() => {
+    if (availableAccounts.length) {
+      loginDevice(availableAccounts[0]);
+    }
+  }, [availableAccounts, loginDevice]);
 
   return (
     <div

@@ -1,7 +1,13 @@
 "use client";
 
 import { ChainContext, UserContext } from "@/app/providers";
-import { IUser, createUser, getUser } from "@/api/apiService";
+import {
+  IUser,
+  createUser,
+  deleteDevice,
+  deleteUser,
+  getUser,
+} from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
 import { createClient, createMnemonic } from "@/helpers/createAccount";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -180,13 +186,68 @@ export const useAccount = ({ useGasManager }: Props) => {
     setIsLoading(false);
   }, [bundlerClient, chain, initData, initDataUnsafe, setUser]);
 
-  const resetAccount = useCallback(() => {
+  const resetAccount = useCallback(async () => {
+    if (!initData || !initDataUnsafe) return;
+
+    const parser = new UAParser();
+    const result = parser.getResult();
+
+    await deleteUser({
+      telegramData: {
+        initData,
+        initDataUnsafe,
+      },
+      data: {
+        publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
+        deviceName: `${result.device.vendor} ${result.device.model}`,
+        accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
+      },
+    });
+
     localStorage.removeItem("mnemonic");
     localStorage.removeItem("accountAddress");
     localStorage.removeItem("accountOwner");
     localStorage.removeItem("isOwner");
     setClient(null);
-  }, []);
+  }, [initData, initDataUnsafe]);
+
+  const exitAccount = useCallback(async () => {
+    const pluginActionExtendedClient = client?.extend(multiOwnerPluginActions);
+
+    if (
+      !initData ||
+      !initDataUnsafe ||
+      !pluginActionExtendedClient ||
+      !client?.account
+    )
+      return;
+
+    const parser = new UAParser();
+    const result = parser.getResult();
+
+    await deleteDevice({
+      telegramData: {
+        initData,
+        initDataUnsafe,
+      },
+      data: {
+        publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
+        deviceName: `${result.device.vendor} ${result.device.model}`,
+        accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
+      },
+    });
+
+    await pluginActionExtendedClient.updateOwners({
+      args: [[], [localStorage.getItem("accountOwner") as `0x${string}`]],
+      account: client.account,
+    });
+
+    localStorage.removeItem("mnemonic");
+    localStorage.removeItem("accountAddress");
+    localStorage.removeItem("accountOwner");
+    localStorage.removeItem("isOwner");
+    setClient(null);
+  }, [client, initData, initDataUnsafe]);
 
   return {
     client,
@@ -198,5 +259,6 @@ export const useAccount = ({ useGasManager }: Props) => {
     isOwner,
     owners,
     getOwners,
+    exitAccount,
   };
 };

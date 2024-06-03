@@ -5,10 +5,17 @@ import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
 
 export default function Home() {
-  const { client, isLoading, login, signup, resetAccount, isOwner } =
-    useAccount({
-      useGasManager: false,
-    });
+  const {
+    client,
+    isLoading,
+    login,
+    signup,
+    resetAccount,
+    isOwner,
+    exitAccount,
+  } = useAccount({
+    useGasManager: false,
+  });
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
@@ -21,7 +28,7 @@ export default function Home() {
         </div>
       ) : client ? (
         isOwner ? (
-          <ProfileCard resetAccount={resetAccount} />
+          <ProfileCard resetAccount={resetAccount} exitAccount={exitAccount} />
         ) : (
           <div
             className="flex min-w-80 flex-col justify-center rounded-lg bg-[#0F172A] p-10"

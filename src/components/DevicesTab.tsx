@@ -3,6 +3,7 @@ import { FC, useContext } from "react";
 import { Chain } from "viem/chains";
 import DeviceItem from "./DeviceItem";
 import { UserContext } from "@/app/providers";
+import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 interface Props {
   chain: Chain;
@@ -13,9 +14,13 @@ interface Props {
 const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
   const userData = useContext(UserContext);
 
+  const [initDataUnsafe, initData] = useInitData();
+
   return (
     <>
       {userData?.user?.devices &&
+        initData &&
+        initDataUnsafe &&
         userData.user.devices.map((device) => (
           <DeviceItem
             key={device.publicKey}
@@ -23,6 +28,10 @@ const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
             chain={chain}
             owners={owners}
             getOwners={getOwners}
+            initData={initData}
+            initDataUnsafe={initDataUnsafe}
+            setUserData={userData.setUser}
+            accountAddress={userData?.user && userData.user.accountAddress}
           />
         ))}
     </>
