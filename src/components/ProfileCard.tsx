@@ -253,7 +253,7 @@ export const ProfileCard: FC<Props> = ({
   return (
     <>
       <TabGroup
-        className="h-full w-full rounded-lg bg-[#0F172A] p-10"
+        className="h-full w-full flex-grow rounded-lg bg-[#0F172A] p-10"
         style={{ maxWidth: "95vw" }}
       >
         <TabList className="mb-5 ml-auto mr-auto flex w-fit">
