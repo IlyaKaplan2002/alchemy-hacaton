@@ -122,6 +122,10 @@ export const useAccount = ({ useGasManager }: Props) => {
     client,
   });
 
+  useEffect(() => {
+    login();
+  }, [login]);
+
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
     const { mnemonic, address } = await createMnemonic();
 
