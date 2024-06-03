@@ -157,6 +157,8 @@ export const useAccount = ({ useGasManager }: Props) => {
       );
 
       setOwnersLoaded(true);
+    } else {
+      setOwnersLoaded(true);
     }
   }, [client]);
 
