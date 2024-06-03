@@ -188,7 +188,9 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
   const devicesToApprove = useMemo(() => {
     return (
       userData?.user?.devices?.filter(
-        (device) => !owners.includes(device.publicKey),
+        (device) =>
+          !owners.includes(device.publicKey) &&
+          device.publicKey !== localStorage.getItem("accountOwner"),
       ) || []
     );
   }, [owners, userData?.user?.devices]);
@@ -235,7 +237,6 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
 
   return (
     <>
-      {" "}
       <TabGroup
         className="w-full rounded-lg bg-[#0F172A] p-10"
         style={{ maxWidth: "95vw" }}
