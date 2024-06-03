@@ -14,7 +14,7 @@ export default function Home() {
     isOwner,
     exitAccount,
   } = useAccount({
-    useGasManager: false,
+    useGasManager: true,
   });
 
   return (
