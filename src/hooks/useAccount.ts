@@ -133,6 +133,16 @@ export const useAccount = ({ useGasManager }: Props) => {
   }, [login]);
 
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
+    if (
+      localStorage.getItem("accountOwner") &&
+      localStorage.getItem("mnemonic")
+    ) {
+      return {
+        address: localStorage.getItem("accountOwner") as `0x${string}`,
+        mnemonic: localStorage.getItem("mnemonic") as string,
+      };
+    }
+
     const { mnemonic, address } = await createMnemonic();
 
     localStorage.setItem("accountAddress", accountAddress);
