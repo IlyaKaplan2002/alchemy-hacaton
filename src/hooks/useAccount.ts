@@ -55,7 +55,7 @@ export const useAccount = ({ useGasManager }: Props) => {
   );
 
   const getUserData = useCallback(async () => {
-    if (initData && initDataUnsafe && client?.account?.address) {
+    if (initData && initDataUnsafe) {
       try {
         const parser = new UAParser();
         const result = parser.getResult();
@@ -87,7 +87,7 @@ export const useAccount = ({ useGasManager }: Props) => {
         }
       }
     }
-  }, [client, initData, initDataUnsafe]);
+  }, [initData, initDataUnsafe]);
 
   const login = useCallback(async () => {
     setIsLoading(true);
@@ -127,6 +127,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     initDataUnsafe,
     setUser,
     useGasManager,
+    client,
   });
 
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
@@ -138,10 +139,6 @@ export const useAccount = ({ useGasManager }: Props) => {
 
     return { address, mnemonic };
   }, []);
-
-  useEffect(() => {
-    login();
-  }, [login]);
 
   const getOwners = useCallback(async () => {
     if (client) {

@@ -30,6 +30,10 @@ export default function Home() {
     return () => clearInterval(i);
   }, [getOwners, getUserData]);
 
+  useEffect(() => {
+    login();
+  }, [login]);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
       {isLoading || !ownersLoaded ? (
