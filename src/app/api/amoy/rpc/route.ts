@@ -12,6 +12,8 @@ export async function POST(req: Request) {
     );
   }
 
+  console.log("req", req);
+
   const body = await req.json();
 
   const res = await fetch(`${rpcUrl}/${apiKey}`, {
@@ -21,6 +23,8 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify(body),
   });
+
+  console.log("res", res);
 
   if (!res.ok) {
     return NextResponse.json(await res.json().catch((e) => ({})), {
