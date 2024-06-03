@@ -168,15 +168,6 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
   }, [client]);
 
-  useEffect(() => {
-    const i = setInterval(() => {
-      getOwners();
-      getUserData();
-    }, 1000);
-
-    return () => clearInterval(i);
-  }, [getOwners, getUserData]);
-
   const signup = useCallback(async () => {
     setIsLoading(true);
 
@@ -290,5 +281,6 @@ export const useAccount = ({ useGasManager }: Props) => {
     getOwners,
     exitAccount,
     ownersLoaded,
+    getUserData,
   };
 };

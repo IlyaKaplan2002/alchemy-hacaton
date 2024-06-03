@@ -3,6 +3,7 @@
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
+import { useEffect } from "react";
 
 export default function Home() {
   const {
@@ -14,9 +15,20 @@ export default function Home() {
     isOwner,
     exitAccount,
     ownersLoaded,
+    getOwners,
+    getUserData,
   } = useAccount({
     useGasManager: true,
   });
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      getOwners();
+      getUserData();
+    }, 1000);
+
+    return () => clearInterval(i);
+  }, [getOwners, getUserData]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
