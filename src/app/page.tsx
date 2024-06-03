@@ -23,7 +23,7 @@ export default function Home() {
 
   useEffect(() => {
     const i = setInterval(() => {
-      getOwners();
+      getOwners(true);
       getUserData();
     }, 1000);
 
