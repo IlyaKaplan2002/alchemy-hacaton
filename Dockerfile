@@ -7,13 +7,18 @@ FROM node:alpine
 WORKDIR /app
 
 # Copy the package-lock.json file.
-COPY package-lock.json .
+COPY yarn.lock .
 
 # Copy the package.json file.
 COPY package.json .
 
+RUN set -eux \
+    & apk add \
+    --no-cache \
+    yarn
+
 # Install application dependencies.
-RUN npm install
+RUN yarn
 
 # Copy the rest of the application files.
 COPY . .
@@ -22,7 +27,7 @@ COPY . .
 EXPOSE 3000
 
 USER root
-RUN npm run build
+RUN yarn build
 
 # Run the application.
-CMD ["npm", "run", "start"]
+CMD ["yarn", "start"]
