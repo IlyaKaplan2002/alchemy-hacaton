@@ -6,7 +6,6 @@ import {
   createUser,
   deleteDevice,
   deleteUser,
-  getCountry,
   getUser,
 } from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
@@ -79,14 +78,8 @@ export const useAccount = ({ useGasManager }: Props) => {
 
       if (initData && initDataUnsafe && client?.account?.address) {
         try {
-          const {
-            data: { country },
-          } = await getCountry();
-
           const parser = new UAParser();
           const result = parser.getResult();
-
-          console.log(result);
 
           const { data: user } = await getUser({
             telegramData: {
@@ -96,7 +89,7 @@ export const useAccount = ({ useGasManager }: Props) => {
             data: {
               publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
               accountAddress: client.account.address,
-              deviceName: `${navigator.userAgent}, ${country}`,
+              deviceName: `${result.os.name} ${result.os.version}`,
             },
           });
 
@@ -118,7 +111,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
 
     setIsLoading(false);
-  }, [bundlerClient, chain, initData, initDataUnsafe, setUser, useGasManager]);
+  }, [chain, initData, initDataUnsafe, useGasManager]);
 
   useWhyDidYouUpdate("useAccount", {
     bundlerClient,
@@ -189,7 +182,7 @@ export const useAccount = ({ useGasManager }: Props) => {
           },
           data: {
             publicKey: address,
-            deviceName: `${result.device.vendor} ${result.device.model}`,
+            deviceName: `${result.os.name} ${result.os.version}`,
             accountAddress: client.account.address,
           },
         });
@@ -218,7 +211,7 @@ export const useAccount = ({ useGasManager }: Props) => {
       },
       data: {
         publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-        deviceName: `${result.device.vendor} ${result.device.model}`,
+        deviceName: `${result.os.name} ${result.os.version}`,
         accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
       },
     });
@@ -251,7 +244,7 @@ export const useAccount = ({ useGasManager }: Props) => {
       },
       data: {
         publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-        deviceName: `${result.device.vendor} ${result.device.model}`,
+        deviceName: `${result.os.name} ${result.os.version}`,
         accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
       },
     });

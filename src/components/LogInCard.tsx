@@ -57,7 +57,7 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
             initDataUnsafe,
           },
           data: {
-            deviceName: `${result.device.vendor} ${result.device.model}`,
+            deviceName: `${result.os.name} ${result.os.version}`,
             publicKey: address,
             accountAddress: account.accountAddress,
           },
@@ -119,7 +119,7 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
                       initDataUnsafe,
                     },
                     data: {
-                      deviceName: `${result.device.vendor} ${result.device.model}`,
+                      deviceName: `${result.os.name} ${result.os.version}`,
                       publicKey: address,
                       accountAddress: account.accountAddress,
                     },

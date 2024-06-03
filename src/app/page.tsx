@@ -42,7 +42,7 @@ export default function Home() {
               className="w-full transform rounded-lg bg-[red] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
               onClick={resetAccount}
             >
-              Go Back
+              Cancel
             </button>
           </div>
         )

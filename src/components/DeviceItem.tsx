@@ -92,7 +92,7 @@ const DeviceItem: FC<Props> = ({
                     },
                     data: {
                       publicKey: device.publicKey,
-                      deviceName: `${result.device.vendor} ${result.device.model}`,
+                      deviceName: `${result.os.name} ${result.os.version}`,
                       accountAddress,
                     },
                   });
