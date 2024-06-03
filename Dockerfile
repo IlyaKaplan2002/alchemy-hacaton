@@ -14,8 +14,6 @@ COPY package.json .
 
 USER root
 
-RUN npm install -g yarn
-
 # Install application dependencies.
 RUN yarn
 
