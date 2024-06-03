@@ -164,10 +164,8 @@ export const useAccount = ({ useGasManager }: Props) => {
             : (owners as `0x${string}`[]),
         );
 
-        if (!notSetLoading) {
-          setOwnersLoaded(true);
-        }
-      } else if (!notSetLoading) {
+        setOwnersLoaded(true);
+      } else {
         setOwnersLoaded(true);
       }
     },
