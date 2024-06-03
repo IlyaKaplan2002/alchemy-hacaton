@@ -236,10 +236,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
     getBalance();
   }, [getBalance]);
 
-  const parser = new UAParser();
-  const result = parser.getResult();
-
-  console.log(result);
+  console.log(client);
 
   return (
     <>

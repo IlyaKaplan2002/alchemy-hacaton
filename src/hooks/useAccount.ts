@@ -79,9 +79,7 @@ export const useAccount = ({ useGasManager }: Props) => {
         console.log(error);
 
         if ((error as any).response.data.message === "User not found") {
-          localStorage.removeItem("mnemonic");
           localStorage.removeItem("accountAddress");
-          localStorage.removeItem("accountOwner");
           localStorage.removeItem("isOwner");
           setClient(null);
         }
@@ -228,9 +226,7 @@ export const useAccount = ({ useGasManager }: Props) => {
       },
     });
 
-    localStorage.removeItem("mnemonic");
     localStorage.removeItem("accountAddress");
-    localStorage.removeItem("accountOwner");
     localStorage.removeItem("isOwner");
     setClient(null);
   }, [initData, initDataUnsafe]);
@@ -266,9 +262,7 @@ export const useAccount = ({ useGasManager }: Props) => {
       account: client.account,
     });
 
-    localStorage.removeItem("mnemonic");
     localStorage.removeItem("accountAddress");
-    localStorage.removeItem("accountOwner");
     localStorage.removeItem("isOwner");
     setClient(null);
   }, [client, initData, initDataUnsafe]);

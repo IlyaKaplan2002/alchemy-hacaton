@@ -22,13 +22,15 @@ export default function Home() {
   });
 
   useEffect(() => {
+    if (!client) return;
+
     const i = setInterval(() => {
       getOwners(true);
       getUserData();
     }, 1000);
 
     return () => clearInterval(i);
-  }, [getOwners, getUserData]);
+  }, [getOwners, getUserData, client]);
 
   useEffect(() => {
     login();
