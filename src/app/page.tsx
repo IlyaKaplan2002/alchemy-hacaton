@@ -25,12 +25,19 @@ export default function Home() {
     if (!client) return;
 
     const i = setInterval(() => {
-      getOwners(true);
       getUserData();
     }, 1000);
 
     return () => clearInterval(i);
   }, [getOwners, getUserData, client]);
+
+  useEffect(() => {
+    const i = setInterval(() => {
+      getOwners();
+    }, 1000);
+
+    return () => clearInterval(i);
+  }, [getOwners]);
 
   useEffect(() => {
     login();
