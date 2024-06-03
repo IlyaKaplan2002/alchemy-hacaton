@@ -114,9 +114,16 @@ export interface IERC20Token {
 interface Props {
   resetAccount: () => void;
   exitAccount: () => void;
+  owners: `0x${string}`[];
+  getOwners: () => Promise<void>;
 }
 
-export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
+export const ProfileCard: FC<Props> = ({
+  resetAccount,
+  exitAccount,
+  owners,
+  getOwners,
+}) => {
   const [balance, setBalance] = useState(0);
   const [tokenAddress, setTokenAddress] = useState("");
   const [importedTokens, setImportedTokens] = useState<IERC20Token[]>([]);
@@ -135,7 +142,7 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
   const chain = chainContext?.chain || polygonAmoy;
   const setChain = chainContext?.setChain || (() => {});
 
-  const { client, owners, getOwners } = useAccount({ useGasManager: false });
+  const { client } = useAccount({ useGasManager: false });
 
   const userData = useContext(UserContext);
 

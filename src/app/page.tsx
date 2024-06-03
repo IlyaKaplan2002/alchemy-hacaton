@@ -17,6 +17,7 @@ export default function Home() {
     ownersLoaded,
     getOwners,
     getUserData,
+    owners,
   } = useAccount({
     useGasManager: true,
   });
@@ -47,7 +48,12 @@ export default function Home() {
         </div>
       ) : client ? (
         isOwner ? (
-          <ProfileCard resetAccount={resetAccount} exitAccount={exitAccount} />
+          <ProfileCard
+            resetAccount={resetAccount}
+            exitAccount={exitAccount}
+            owners={owners}
+            getOwners={getOwners}
+          />
         ) : (
           <div
             className="flex min-w-80 flex-col justify-center rounded-lg bg-[#0F172A] p-10"
