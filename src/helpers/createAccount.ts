@@ -49,7 +49,7 @@ export const createClient = async ({
   useGasManager?: boolean;
 }) => {
   const rpcTransport = http(
-    chain.id === polygonAmoy.id ? "api/amoy" : "api/sepolia",
+    chain.id === polygonAmoy.id ? "api/amoy/rpc" : "api/sepolia/rpc",
   );
 
   const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
