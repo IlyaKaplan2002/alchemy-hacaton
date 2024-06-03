@@ -6,6 +6,7 @@ import {
   createUser,
   deleteDevice,
   deleteUser,
+  getCountry,
   getUser,
 } from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
@@ -77,10 +78,16 @@ export const useAccount = ({ useGasManager }: Props) => {
       });
 
       if (initData && initDataUnsafe && client?.account?.address) {
-        const parser = new UAParser();
-        const result = parser.getResult();
-
         try {
+          const {
+            data: { country },
+          } = await getCountry();
+
+          const parser = new UAParser();
+          const result = parser.getResult();
+
+          console.log(result);
+
           const { data: user } = await getUser({
             telegramData: {
               initData,
@@ -89,7 +96,7 @@ export const useAccount = ({ useGasManager }: Props) => {
             data: {
               publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
               accountAddress: client.account.address,
-              deviceName: `${result.device.vendor} ${result.device.model}`,
+              deviceName: `${navigator.userAgent}, ${country}`,
             },
           });
 
@@ -111,7 +118,7 @@ export const useAccount = ({ useGasManager }: Props) => {
     }
 
     setIsLoading(false);
-  }, [chain, initData, initDataUnsafe, useGasManager]);
+  }, [bundlerClient, chain, initData, initDataUnsafe, setUser, useGasManager]);
 
   useWhyDidYouUpdate("useAccount", {
     bundlerClient,

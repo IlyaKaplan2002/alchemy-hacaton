@@ -70,3 +70,11 @@ export const deleteUser = async (
 ): Promise<AxiosResponse<IUser>> => {
   return axiosInstance.post("/user/delete", data);
 };
+
+export const getCountry = async (): Promise<
+  AxiosResponse<{
+    country: string;
+  }>
+> => {
+  return axios.get("https://api.country.is");
+};
