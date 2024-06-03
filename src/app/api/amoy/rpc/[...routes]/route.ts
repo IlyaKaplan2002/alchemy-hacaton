@@ -14,9 +14,9 @@ export async function POST(
     );
   }
 
-  const body = await req.json();
+  console.log("here", req, params);
 
-  console.log(params.routes);
+  const body = await req.json();
 
   const res = await fetch(apiUrl + `/${params.routes.join("/")}`, {
     method: "POST",
