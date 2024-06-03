@@ -22,7 +22,11 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (!client) return;
+    if (!client) {
+      getOwners();
+
+      return;
+    }
 
     const i = setInterval(() => {
       getUserData();
