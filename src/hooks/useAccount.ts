@@ -96,6 +96,13 @@ export const useAccount = ({ useGasManager }: Props) => {
           setUser(user);
         } catch (error) {
           console.log(error);
+
+          if ((error as any).response.data.message === "User not found") {
+            localStorage.removeItem("mnemonic");
+            localStorage.removeItem("accountAddress");
+            localStorage.removeItem("accountOwner");
+            localStorage.removeItem("isOwner");
+          }
         }
       }
 
