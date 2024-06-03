@@ -16,9 +16,6 @@ export async function POST(req: Request) {
 
   const res = await fetch(`${rpcUrl}/${apiKey}`, {
     method: "POST",
-    headers: {
-      ...req.headers,
-    },
     body: JSON.stringify(body),
   });
 
