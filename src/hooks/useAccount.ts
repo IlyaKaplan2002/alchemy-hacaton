@@ -10,7 +10,7 @@ import {
 } from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
 import { createClient, createMnemonic } from "@/helpers/createAccount";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import { UAParser } from "ua-parser-js";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
@@ -77,12 +77,6 @@ export const useAccount = ({ useGasManager }: Props) => {
         setUser(user);
       } catch (error) {
         console.log(error);
-
-        if ((error as any).response.data.message === "User not found") {
-          localStorage.removeItem("accountAddress");
-          localStorage.removeItem("isOwner");
-          setClient(null);
-        }
       }
     }
   }, [initData, initDataUnsafe]);

@@ -26,18 +26,11 @@ export default function Home() {
 
     const i = setInterval(() => {
       getUserData();
+      getOwners(true);
     }, 1000);
 
     return () => clearInterval(i);
   }, [getOwners, getUserData, client]);
-
-  useEffect(() => {
-    const i = setInterval(() => {
-      getOwners();
-    }, 1000);
-
-    return () => clearInterval(i);
-  }, [getOwners]);
 
   useEffect(() => {
     login();
