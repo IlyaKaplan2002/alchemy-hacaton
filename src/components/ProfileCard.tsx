@@ -438,7 +438,8 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
       {userData?.user?.devices &&
         initData &&
         initDataUnsafe &&
-        devicesToApprove[0] && (
+        devicesToApprove[0] &&
+        owners.length && (
           <NewDevicePopup
             isOpen={!!devicesToApprove[0]}
             device={devicesToApprove[0]}
