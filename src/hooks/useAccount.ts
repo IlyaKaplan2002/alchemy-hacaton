@@ -28,6 +28,7 @@ export const useAccount = ({ useGasManager }: Props) => {
   const [client, setClient] = useState<SmartAccountClient | null>(null);
   const [owners, setOwners] = useState<`0x${string}`[]>([]);
   const [isOwner, setIsOwner] = useState(false);
+  const [ownersLoaded, setOwnersLoaded] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
@@ -138,6 +139,7 @@ export const useAccount = ({ useGasManager }: Props) => {
 
   const getOwners = useCallback(async () => {
     if (client) {
+      setOwnersLoaded(false);
       const pluginActionExtendedClient = client.extend(multiOwnerPluginActions);
 
       if (!pluginActionExtendedClient || !client.account) {
@@ -153,6 +155,8 @@ export const useAccount = ({ useGasManager }: Props) => {
           ? [localStorage.getItem("accountOwner") as `0x${string}`]
           : (owners as `0x${string}`[]),
       );
+
+      setOwnersLoaded(true);
     }
   }, [client]);
 
@@ -272,5 +276,6 @@ export const useAccount = ({ useGasManager }: Props) => {
     owners,
     getOwners,
     exitAccount,
+    ownersLoaded,
   };
 };
