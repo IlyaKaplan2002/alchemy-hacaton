@@ -12,10 +12,9 @@ COPY yarn.lock .
 # Copy the package.json file.
 COPY package.json .
 
-RUN set -eux \
-    & apk add \
-    --no-cache \
-    yarn
+USER root
+
+RUN npm install -g yarn
 
 # Install application dependencies.
 RUN yarn
@@ -26,7 +25,6 @@ COPY . .
 # Expose the port.
 EXPOSE 3000
 
-USER root
 RUN npm run build
 
 # Run the application.
