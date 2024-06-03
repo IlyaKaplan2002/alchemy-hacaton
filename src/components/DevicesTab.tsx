@@ -2,7 +2,6 @@ import { FC, useContext, useMemo, useState } from "react";
 
 import { Chain } from "viem/chains";
 import DeviceItem from "./DeviceItem";
-import NewDevicePopup from "./NewDevicePopup";
 import { UserContext } from "@/app/providers";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
@@ -16,14 +15,6 @@ const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
   const userData = useContext(UserContext);
 
   const [initDataUnsafe, initData] = useInitData();
-
-  const devicesToApprove = useMemo(() => {
-    return (
-      userData?.user?.devices?.filter(
-        (device) => !owners.includes(device.publicKey),
-      ) || []
-    );
-  }, [owners, userData?.user?.devices]);
 
   return (
     <>
@@ -42,16 +33,6 @@ const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
               accountAddress={userData?.user && userData.user.accountAddress}
             />
           ))}
-          <NewDevicePopup
-            isOpen={!!devicesToApprove[0]}
-            device={devicesToApprove[0]}
-            chain={chain}
-            getOwners={getOwners}
-            initData={initData}
-            initDataUnsafe={initDataUnsafe}
-            setUserData={userData.setUser}
-            accountAddress={userData?.user && userData.user.accountAddress}
-          />
         </>
       )}
     </>
