@@ -54,6 +54,41 @@ export const useAccount = ({ useGasManager }: Props) => {
     [userData],
   );
 
+  const getUserData = useCallback(async () => {
+    if (initData && initDataUnsafe && client?.account?.address) {
+      try {
+        const parser = new UAParser();
+        const result = parser.getResult();
+
+        const { data: user } = await getUser({
+          telegramData: {
+            initData,
+            initDataUnsafe,
+          },
+          data: {
+            publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
+            accountAddress: localStorage.getItem(
+              "accountAddress",
+            ) as `0x${string}`,
+            deviceName: `${result.os.name} ${result.os.version}`,
+          },
+        });
+
+        setUser(user);
+      } catch (error) {
+        console.log(error);
+
+        if ((error as any).response.data.message === "User not found") {
+          localStorage.removeItem("mnemonic");
+          localStorage.removeItem("accountAddress");
+          localStorage.removeItem("accountOwner");
+          localStorage.removeItem("isOwner");
+          setClient(null);
+        }
+      }
+    }
+  }, [client, initData, initDataUnsafe]);
+
   const login = useCallback(async () => {
     setIsLoading(true);
 
@@ -77,42 +112,13 @@ export const useAccount = ({ useGasManager }: Props) => {
         useGasManager,
       });
 
-      if (initData && initDataUnsafe && client?.account?.address) {
-        try {
-          const parser = new UAParser();
-          const result = parser.getResult();
-
-          const { data: user } = await getUser({
-            telegramData: {
-              initData,
-              initDataUnsafe,
-            },
-            data: {
-              publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-              accountAddress: client.account.address,
-              deviceName: `${result.os.name} ${result.os.version}`,
-            },
-          });
-
-          setUser(user);
-        } catch (error) {
-          console.log(error);
-
-          if ((error as any).response.data.message === "User not found") {
-            localStorage.removeItem("mnemonic");
-            localStorage.removeItem("accountAddress");
-            localStorage.removeItem("accountOwner");
-            localStorage.removeItem("isOwner");
-            setClient(null);
-          }
-        }
-      }
+      getUserData();
 
       setClient(client);
     }
 
     setIsLoading(false);
-  }, [chain, initData, initDataUnsafe, useGasManager]);
+  }, [chain, initData, initDataUnsafe, useGasManager, getUserData]);
 
   useWhyDidYouUpdate("useAccount", {
     bundlerClient,
@@ -163,8 +169,13 @@ export const useAccount = ({ useGasManager }: Props) => {
   }, [client]);
 
   useEffect(() => {
-    getOwners();
-  }, [getOwners]);
+    const i = setInterval(() => {
+      getOwners();
+      getUserData();
+    }, 1000);
+
+    return () => clearInterval(i);
+  }, [getOwners, getUserData]);
 
   const signup = useCallback(async () => {
     setIsLoading(true);
