@@ -140,30 +140,39 @@ export const useAccount = ({ useGasManager }: Props) => {
     return { address, mnemonic };
   }, []);
 
-  const getOwners = useCallback(async () => {
-    if (client) {
-      setOwnersLoaded(false);
-      const pluginActionExtendedClient = client.extend(multiOwnerPluginActions);
+  const getOwners = useCallback(
+    async (notSetLoading?: boolean) => {
+      if (client) {
+        if (!notSetLoading) {
+          setOwnersLoaded(false);
+        }
+        const pluginActionExtendedClient = client.extend(
+          multiOwnerPluginActions,
+        );
 
-      if (!pluginActionExtendedClient || !client.account) {
-        return;
+        if (!pluginActionExtendedClient || !client.account) {
+          return;
+        }
+
+        const owners = await pluginActionExtendedClient.readOwners({
+          account: client.account,
+        });
+
+        setOwners(
+          !owners.length && localStorage.getItem("isOwner") === "true"
+            ? [localStorage.getItem("accountOwner") as `0x${string}`]
+            : (owners as `0x${string}`[]),
+        );
+
+        if (!notSetLoading) {
+          setOwnersLoaded(true);
+        }
+      } else if (!notSetLoading) {
+        setOwnersLoaded(true);
       }
-
-      const owners = await pluginActionExtendedClient.readOwners({
-        account: client.account,
-      });
-
-      setOwners(
-        !owners.length && localStorage.getItem("isOwner") === "true"
-          ? [localStorage.getItem("accountOwner") as `0x${string}`]
-          : (owners as `0x${string}`[]),
-      );
-
-      setOwnersLoaded(true);
-    } else {
-      setOwnersLoaded(true);
-    }
-  }, [client]);
+    },
+    [client],
+  );
 
   const signup = useCallback(async () => {
     setIsLoading(true);
