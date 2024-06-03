@@ -6,6 +6,7 @@ import { IUser, addDevice, getUsersMany } from "@/api/apiService";
 import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
+import { useWhyDidYouUpdate } from "ahooks";
 
 interface Props {
   login: () => Promise<void>;
@@ -66,6 +67,13 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
     },
     [initData, initDataUnsafe, importAccount, login],
   );
+
+  useWhyDidYouUpdate("LogInCard", {
+    login,
+    initData,
+    initDataUnsafe,
+    importAccount,
+  });
 
   useEffect(() => {
     if (availableAccounts.length) {
