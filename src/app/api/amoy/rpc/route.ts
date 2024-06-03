@@ -23,6 +23,8 @@ export async function POST(req: Request) {
   console.log("req.headers", req.headers);
   console.log("JSON.stringify(body)", JSON.stringify(body));
 
+  console.log(`${rpcUrl}/${apiKey}`);
+
   const res = await fetch(`${rpcUrl}/${apiKey}`, {
     method: "POST",
     headers: {
