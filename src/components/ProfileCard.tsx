@@ -27,7 +27,6 @@ import DevicesTab from "./DevicesTab";
 import NewDevicePopup from "./NewDevicePopup";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
-import { UAParser } from "ua-parser-js";
 import clsx from "clsx";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
@@ -236,7 +235,13 @@ export const ProfileCard: FC<Props> = ({ resetAccount, exitAccount }) => {
     getBalance();
   }, [getBalance]);
 
-  console.log(client);
+  console.log(
+    userData?.user?.devices,
+    initData,
+    initDataUnsafe,
+    devicesToApprove[0],
+    owners.length,
+  );
 
   return (
     <>
