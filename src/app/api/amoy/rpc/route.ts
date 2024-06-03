@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   console.log("apiKey", apiKey);
   console.log("req.headers", req.headers);
   console.log("JSON.stringify(body)", JSON.stringify(body));
+  console.log("JSON.stringify(req.headers)", JSON.stringify(req.headers));
 
   console.log(`${rpcUrl}/${apiKey}`);
 
