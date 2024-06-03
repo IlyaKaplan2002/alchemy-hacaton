@@ -27,7 +27,7 @@ COPY . .
 EXPOSE 3000
 
 USER root
-RUN yarn build
+RUN npm run build
 
 # Run the application.
 CMD ["yarn", "start"]
