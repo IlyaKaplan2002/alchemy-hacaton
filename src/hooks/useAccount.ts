@@ -102,6 +102,7 @@ export const useAccount = ({ useGasManager }: Props) => {
             localStorage.removeItem("accountAddress");
             localStorage.removeItem("accountOwner");
             localStorage.removeItem("isOwner");
+            setClient(null);
           }
         }
       }
