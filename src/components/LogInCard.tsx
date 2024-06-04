@@ -1,7 +1,7 @@
 "use client";
 
-import { FC, useCallback, useEffect, useState } from "react";
-import { IUser, addDevice, getUsersMany } from "@/api/apiService";
+import { FC, useCallback, useEffect } from "react";
+import { IUser, addDevice } from "@/api/apiService";
 
 import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
@@ -11,42 +11,13 @@ import { useWhyDidYouUpdate } from "ahooks";
 interface Props {
   login: () => Promise<void>;
   signup: () => Promise<void>;
-  isOwner: boolean;
-  ownersLoaded: boolean;
+  availableAccounts: IUser[];
 }
 
-export const LogInCard: FC<Props> = ({
-  login,
-  signup,
-  isOwner,
-  ownersLoaded,
-}) => {
+export const LogInCard: FC<Props> = ({ login, signup, availableAccounts }) => {
   const { importAccount } = useAccount({ useGasManager: false });
 
-  const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
-
   const [initDataUnsafe, initData] = useInitData();
-
-  const getAvailableAccounts = useCallback(async () => {
-    if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) return;
-
-    try {
-      const { data: accounts } = await getUsersMany({
-        telegramData: {
-          initData,
-          initDataUnsafe,
-        },
-        data: undefined,
-      });
-      setAvailableAccounts(accounts);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [initData, initDataUnsafe]);
-
-  useEffect(() => {
-    getAvailableAccounts();
-  }, [getAvailableAccounts]);
 
   const loginDevice = useCallback(
     async (account: IUser) => {

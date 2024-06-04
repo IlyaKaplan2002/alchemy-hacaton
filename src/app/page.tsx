@@ -1,11 +1,19 @@
 "use client";
 
+import { IUser, getUsersMany } from "@/api/apiService";
+import { useCallback, useEffect, useState } from "react";
+
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
 import { useAccount } from "@/hooks/useAccount";
-import { useEffect } from "react";
+import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 export default function Home() {
+  const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
+  const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
+
+  const [initDataUnsafe, initData] = useInitData();
+
   const {
     client,
     isLoading,
@@ -40,11 +48,35 @@ export default function Home() {
     return () => clearInterval(i);
   }, [getOwners, getUserData, client]);
 
-  console.log(client, isOwner);
+  const getAvailableAccounts = useCallback(async () => {
+    if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
+      setAvailableAccountsLoaded(true);
+      return;
+    }
+
+    try {
+      const { data: accounts } = await getUsersMany({
+        telegramData: {
+          initData,
+          initDataUnsafe,
+        },
+        data: undefined,
+      });
+      setAvailableAccounts(accounts);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAvailableAccountsLoaded(true);
+    }
+  }, [initData, initDataUnsafe, isOwner, ownersLoaded]);
+
+  useEffect(() => {
+    getAvailableAccounts();
+  }, [getAvailableAccounts]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
-      {isLoading || !ownersLoaded ? (
+      {isLoading || !ownersLoaded || !availableAccountsLoaded ? (
         <div className="flex items-center justify-center">
           <div
             className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
@@ -80,8 +112,7 @@ export default function Home() {
         <LogInCard
           login={login}
           signup={signup}
-          isOwner={isOwner}
-          ownersLoaded={ownersLoaded}
+          availableAccounts={availableAccounts}
         />
       )}
     </main>
