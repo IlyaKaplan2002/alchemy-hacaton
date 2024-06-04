@@ -54,38 +54,44 @@ export const useAccount = ({ useGasManager }: Props) => {
     [userData],
   );
 
-  const getUserData = useCallback(async () => {
-    if (initData && initDataUnsafe) {
-      try {
-        const parser = new UAParser();
-        const result = parser.getResult();
+  const getUserData = useCallback(
+    async (shouldLogout?: boolean) => {
+      if (initData && initDataUnsafe) {
+        try {
+          const parser = new UAParser();
+          const result = parser.getResult();
 
-        const { data: user } = await getUser({
-          telegramData: {
-            initData,
-            initDataUnsafe,
-          },
-          data: {
-            publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-            accountAddress: localStorage.getItem(
-              "accountAddress",
-            ) as `0x${string}`,
-            deviceName: `${result.os.name} ${result.os.version}`,
-          },
-        });
+          const { data: user } = await getUser({
+            telegramData: {
+              initData,
+              initDataUnsafe,
+            },
+            data: {
+              publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
+              accountAddress: localStorage.getItem(
+                "accountAddress",
+              ) as `0x${string}`,
+              deviceName: `${result.os.name} ${result.os.version}`,
+            },
+          });
 
-        setUser(user);
-      } catch (error) {
-        console.log(error);
+          setUser(user);
+        } catch (error) {
+          console.log(error);
 
-        if ((error as any).response.data.message === "User not found") {
-          localStorage.removeItem("accountAddress");
-          localStorage.removeItem("isOwner");
-          setClient(null);
+          if (
+            (error as any).response.data.message === "User not found" &&
+            shouldLogout
+          ) {
+            localStorage.removeItem("accountAddress");
+            localStorage.removeItem("isOwner");
+            setClient(null);
+          }
         }
       }
-    }
-  }, [initData, initDataUnsafe]);
+    },
+    [initData, initDataUnsafe],
+  );
 
   const login = useCallback(async () => {
     setIsLoading(true);

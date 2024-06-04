@@ -30,7 +30,7 @@ export default function Home() {
     }
 
     const i = setInterval(() => {
-      getUserData();
+      getUserData(true);
       getOwners(true);
     }, 1000);
 
