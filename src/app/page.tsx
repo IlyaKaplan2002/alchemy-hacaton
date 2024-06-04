@@ -1,16 +1,18 @@
 "use client";
 
-import { IUser, getUsersMany } from "@/api/apiService";
+import { IUser, addDevice, getUsersMany } from "@/api/apiService";
 import { useCallback, useEffect, useState } from "react";
 
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
+import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 export default function Home() {
   const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
   const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
+  const [importAccountLoaded, setImportAccountLoaded] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
@@ -71,9 +73,55 @@ export default function Home() {
     getAvailableAccounts();
   }, [getAvailableAccounts]);
 
+  const { importAccount } = useAccount({ useGasManager: false });
+
+  const loginDevice = useCallback(
+    async (account: IUser) => {
+      const { address } = await importAccount(account.accountAddress);
+      await login();
+
+      if (!initData || !initDataUnsafe) {
+        setImportAccountLoaded(true);
+        return;
+      }
+
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      try {
+        await addDevice({
+          telegramData: {
+            initData,
+            initDataUnsafe,
+          },
+          data: {
+            deviceName: `${result.os.name} ${result.os.version}`,
+            publicKey: address,
+            accountAddress: account.accountAddress,
+          },
+        });
+      } catch (error) {
+      } finally {
+        setImportAccountLoaded(true);
+      }
+    },
+    [initData, initDataUnsafe, importAccount, login],
+  );
+
+  useEffect(() => {
+    if (availableAccounts.length) {
+      loginDevice(availableAccounts[0]);
+    } else {
+      setImportAccountLoaded(true);
+    }
+  }, [availableAccounts, loginDevice]);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
-      {isLoading || !ownersLoaded || !availableAccountsLoaded ? (
+      {isLoading ||
+      !ownersLoaded ||
+      !availableAccountsLoaded ||
+      !importAccountLoaded ? (
         <div className="flex items-center justify-center">
           <div
             className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"

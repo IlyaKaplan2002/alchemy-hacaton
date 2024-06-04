@@ -1,12 +1,11 @@
 "use client";
 
-import { FC, useCallback, useEffect } from "react";
 import { IUser, addDevice } from "@/api/apiService";
 
+import { FC } from "react";
 import { UAParser } from "ua-parser-js";
 import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
-import { useWhyDidYouUpdate } from "ahooks";
 
 interface Props {
   login: () => Promise<void>;
@@ -18,46 +17,6 @@ export const LogInCard: FC<Props> = ({ login, signup, availableAccounts }) => {
   const { importAccount } = useAccount({ useGasManager: false });
 
   const [initDataUnsafe, initData] = useInitData();
-
-  const loginDevice = useCallback(
-    async (account: IUser) => {
-      const { address } = await importAccount(account.accountAddress);
-      await login();
-
-      if (!initData || !initDataUnsafe) return;
-
-      const parser = new UAParser();
-      const result = parser.getResult();
-
-      try {
-        await addDevice({
-          telegramData: {
-            initData,
-            initDataUnsafe,
-          },
-          data: {
-            deviceName: `${result.os.name} ${result.os.version}`,
-            publicKey: address,
-            accountAddress: account.accountAddress,
-          },
-        });
-      } catch (error) {}
-    },
-    [initData, initDataUnsafe, importAccount, login],
-  );
-
-  useWhyDidYouUpdate("LogInCard", {
-    login,
-    initData,
-    initDataUnsafe,
-    importAccount,
-  });
-
-  useEffect(() => {
-    if (availableAccounts.length) {
-      loginDevice(availableAccounts[0]);
-    }
-  }, [availableAccounts, loginDevice]);
 
   return (
     <div
