@@ -33,11 +33,7 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (!client) {
-      getOwners();
-
-      return;
-    }
+    getOwners();
 
     const i = setInterval(() => {
       getUserData(true);
