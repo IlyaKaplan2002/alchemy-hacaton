@@ -105,12 +105,14 @@ export default function Home() {
   );
 
   useEffect(() => {
+    if (!availableAccountsLoaded) return;
+
     if (availableAccounts.length && !client) {
       loginDevice(availableAccounts[0]);
     } else {
       setImportAccountLoaded(true);
     }
-  }, [availableAccounts, client, loginDevice]);
+  }, [availableAccounts, availableAccountsLoaded, client, loginDevice]);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
