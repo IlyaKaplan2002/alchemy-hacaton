@@ -33,7 +33,6 @@ export default function Home() {
   useEffect(() => {
     if (!client) {
       getOwners();
-      getUserData(true);
 
       return;
     }
