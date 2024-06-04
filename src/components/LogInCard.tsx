@@ -11,9 +11,16 @@ import { useWhyDidYouUpdate } from "ahooks";
 interface Props {
   login: () => Promise<void>;
   signup: () => Promise<void>;
+  isOwner: boolean;
+  ownersLoaded: boolean;
 }
 
-export const LogInCard: FC<Props> = ({ login, signup }) => {
+export const LogInCard: FC<Props> = ({
+  login,
+  signup,
+  isOwner,
+  ownersLoaded,
+}) => {
   const { importAccount } = useAccount({ useGasManager: false });
 
   const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
@@ -21,7 +28,7 @@ export const LogInCard: FC<Props> = ({ login, signup }) => {
   const [initDataUnsafe, initData] = useInitData();
 
   const getAvailableAccounts = useCallback(async () => {
-    if (!initData || !initDataUnsafe) return;
+    if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) return;
 
     try {
       const { data: accounts } = await getUsersMany({

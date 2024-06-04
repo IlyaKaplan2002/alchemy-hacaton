@@ -74,7 +74,12 @@ export default function Home() {
           </div>
         )
       ) : (
-        <LogInCard login={login} signup={signup} />
+        <LogInCard
+          login={login}
+          signup={signup}
+          isOwner={isOwner}
+          ownersLoaded={ownersLoaded}
+        />
       )}
     </main>
   );
