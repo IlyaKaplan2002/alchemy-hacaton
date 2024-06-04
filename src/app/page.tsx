@@ -41,7 +41,7 @@ export default function Home() {
     }, 1000);
 
     return () => clearInterval(i);
-  }, [getOwners, getUserData, client]);
+  }, [getOwners, getUserData]);
 
   const getAvailableAccounts = useCallback(async () => {
     if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
