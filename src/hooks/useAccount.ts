@@ -42,12 +42,13 @@ export const useAccount = ({ useGasManager }: Props) => {
   }, [owners]);
 
   useEffect(() => {
+    if (!ownersLoaded || localStorage.getItem("isOwner")) return;
     if (isOwner) {
       localStorage.setItem("isOwner", "true");
     } else {
       localStorage.removeItem("isOwner");
     }
-  }, [isOwner]);
+  }, [isOwner, ownersLoaded]);
 
   const chainData = useContext(ChainContext);
   const userData = useContext(UserContext);
