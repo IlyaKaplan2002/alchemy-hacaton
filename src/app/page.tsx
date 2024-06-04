@@ -37,11 +37,9 @@ export default function Home() {
       return;
     }
 
-    let notSetLoading = false;
     const i = setInterval(() => {
       getUserData(true);
-      getOwners(notSetLoading);
-      notSetLoading = true;
+      getOwners(true);
     }, 1000);
 
     return () => clearInterval(i);
