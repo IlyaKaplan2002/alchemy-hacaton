@@ -99,6 +99,8 @@ export const useAccount = ({ useGasManager }: Props) => {
     const mnemonic = localStorage.getItem("mnemonic");
 
     const accountAddress = localStorage.getItem("accountAddress");
+
+    if (!accountAddress) return;
     if (mnemonic) {
       if (!localStorage.getItem("accountOwner")) {
         const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
