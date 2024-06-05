@@ -361,17 +361,12 @@ export const useAccount = (): IAccountState => {
   useEffect(() => {
     if (!availableAccountsLoaded) return;
 
-    if (availableAccounts.length) {
+    if (availableAccounts.length && isLoggedIn) {
       loginDevice(availableAccounts[0]);
     } else {
       setImportAccountLoaded(true);
     }
-  }, [
-    availableAccounts,
-    availableAccountsLoaded,
-    clientWithGasManager,
-    loginDevice,
-  ]);
+  }, [availableAccounts, availableAccountsLoaded, isLoggedIn, loginDevice]);
 
   const signup = useCallback(async () => {
     setIsSignupLoading(true);
