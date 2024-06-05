@@ -43,6 +43,7 @@ export interface IAccountState {
   importAccountLoaded: boolean;
   isLoggedIn: boolean;
   isSignupLoading: boolean;
+  deleteLoading: boolean;
 }
 
 export const useAccount = (): IAccountState => {
@@ -60,6 +61,7 @@ export const useAccount = (): IAccountState => {
   const [isSignupLoading, setIsSignupLoading] = useState(false);
   const [importAccountLoaded, setImportAccountLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
@@ -372,6 +374,9 @@ export const useAccount = (): IAccountState => {
 
     localStorage.setItem("mnemonic", mnemonic);
     localStorage.setItem("accountOwner", address);
+    console.log("setting isOwner");
+    localStorage.setItem("isOwner", "true");
+    setIsOwner(true);
     const clientWithGasManager = await createClient({
       mnemonic,
       bundlerClient,
@@ -386,8 +391,6 @@ export const useAccount = (): IAccountState => {
       accountAddress: clientWithGasManager.account.address,
       useGasManager: false,
     });
-    console.log("setting isOwner");
-    localStorage.setItem("isOwner", "true");
 
     if (initData && initDataUnsafe && clientWithGasManager?.account?.address) {
       const parser = new UAParser();
@@ -419,6 +422,8 @@ export const useAccount = (): IAccountState => {
   const resetAccount = useCallback(async () => {
     if (!initData || !initDataUnsafe || !accountAddress) return;
 
+    setDeleteLoading(true);
+
     const parser = new UAParser();
     const result = parser.getResult();
 
@@ -438,6 +443,7 @@ export const useAccount = (): IAccountState => {
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
     setIsLoggedIn(false);
+    setDeleteLoading(false);
   }, [accountAddress, initData, initDataUnsafe]);
 
   const exitAccount = useCallback(async () => {
@@ -498,5 +504,6 @@ export const useAccount = (): IAccountState => {
     importAccountLoaded,
     isLoggedIn,
     isSignupLoading,
+    deleteLoading,
   };
 };

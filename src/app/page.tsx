@@ -16,6 +16,7 @@ export default function Home() {
   const importAccountLoaded = accountData?.importAccountLoaded || false;
   const isLoggedIn = accountData?.isLoggedIn || false;
   const isSignupLoading = accountData?.isSignupLoading || false;
+  const deleteLoading = accountData?.deleteLoading || false;
 
   console.log(
     isLoading,
@@ -25,6 +26,7 @@ export default function Home() {
     importAccountLoaded,
     clientWithGasManager,
     isSignupLoading,
+    deleteLoading,
   );
 
   return (
@@ -33,7 +35,8 @@ export default function Home() {
       !ownersLoaded ||
       !availableAccountsLoaded ||
       !importAccountLoaded ||
-      isSignupLoading ? (
+      isSignupLoading ||
+      deleteLoading ? (
         <div className="flex items-center justify-center">
           <div
             className="text-surface inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white"
