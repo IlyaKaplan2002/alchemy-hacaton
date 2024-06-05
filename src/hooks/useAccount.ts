@@ -42,6 +42,7 @@ export interface IAccountState {
   availableAccountsLoaded: boolean;
   importAccountLoaded: boolean;
   isLoggedIn: boolean;
+  isSignupLoading: boolean;
 }
 
 export const useAccount = (): IAccountState => {
@@ -56,6 +57,7 @@ export const useAccount = (): IAccountState => {
   const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
   const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
   const [clientLoaded, setClientLoaded] = useState(false);
+  const [isSignupLoading, setIsSignupLoading] = useState(false);
   const [importAccountLoaded, setImportAccountLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -354,7 +356,7 @@ export const useAccount = (): IAccountState => {
   ]);
 
   const signup = useCallback(async () => {
-    setIsLoading(true);
+    setIsSignupLoading(true);
 
     const { mnemonic, address } = await createMnemonic();
 
@@ -402,7 +404,7 @@ export const useAccount = (): IAccountState => {
     setClientWithGasManager(clientWithGasManager);
     setClientWithoutGasManager(clientWithoutGasManager);
 
-    setIsLoading(false);
+    setIsSignupLoading(false);
   }, [bundlerClient, chain, initData, initDataUnsafe, setUser]);
 
   const resetAccount = useCallback(async () => {
@@ -426,6 +428,7 @@ export const useAccount = (): IAccountState => {
     localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
+    setIsLoggedIn(false);
   }, [accountAddress, initData, initDataUnsafe]);
 
   const exitAccount = useCallback(async () => {
@@ -485,5 +488,6 @@ export const useAccount = (): IAccountState => {
     availableAccountsLoaded,
     importAccountLoaded,
     isLoggedIn,
+    isSignupLoading,
   };
 };
