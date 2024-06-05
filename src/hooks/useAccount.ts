@@ -12,7 +12,7 @@ import {
 } from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
 import { createClient, createMnemonic } from "@/helpers/createAccount";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { UAParser } from "ua-parser-js";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
@@ -59,6 +59,26 @@ export const useAccount = (): IAccountState => {
 
   const bundlerClient = useBundlerClient();
 
+  const chainData = useContext(ChainContext);
+  const userData = useContext(UserContext);
+
+  const chain = useMemo(
+    () => chainData?.chain || polygonAmoy,
+    [chainData?.chain],
+  );
+  const setUser = useCallback(
+    (user: IUser) => {
+      if (userData) {
+        userData.setUser(user);
+      }
+    },
+    [userData],
+  );
+  const accountAddress = useMemo(
+    () => userData?.user?.accountAddress || null,
+    [userData?.user?.accountAddress],
+  );
+
   useEffect(() => {
     setIsOwner(
       owners.includes(localStorage.getItem("accountOwner") as `0x${string}`) ||
@@ -101,19 +121,6 @@ export const useAccount = (): IAccountState => {
     getAvailableAccounts();
   }, [getAvailableAccounts]);
 
-  const chainData = useContext(ChainContext);
-  const userData = useContext(UserContext);
-
-  const chain = chainData?.chain || polygonAmoy;
-  const setUser = useCallback(
-    (user: IUser) => {
-      if (userData) {
-        userData.setUser(user);
-      }
-    },
-    [userData],
-  );
-
   const getUserData = useCallback(
     async (shouldLogout?: boolean) => {
       if (initData && initDataUnsafe) {
@@ -128,9 +135,6 @@ export const useAccount = (): IAccountState => {
             },
             data: {
               publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-              accountAddress: localStorage.getItem(
-                "accountAddress",
-              ) as `0x${string}`,
               deviceName: `${result.os.name} ${result.os.version}`,
             },
           });
@@ -143,7 +147,6 @@ export const useAccount = (): IAccountState => {
             (error as any).response.data.message === "User not found" &&
             shouldLogout
           ) {
-            localStorage.removeItem("accountAddress");
             localStorage.removeItem("isOwner");
             setClientWithGasManager(null);
             setClientWithoutGasManager(null);
@@ -159,13 +162,11 @@ export const useAccount = (): IAccountState => {
 
     const mnemonic = localStorage.getItem("mnemonic");
 
-    const accountAddress = localStorage.getItem("accountAddress");
-
     if (!accountAddress) {
       setIsLoading(false);
-
       return;
     }
+
     if (mnemonic) {
       if (!localStorage.getItem("accountOwner")) {
         const signer = LocalAccountSigner.mnemonicToAccountSigner(mnemonic);
@@ -190,22 +191,18 @@ export const useAccount = (): IAccountState => {
         useGasManager: false,
       });
 
-      getUserData();
-
       setClientWithGasManager(clientWithGasManager);
       setClientWithoutGasManager(clientWithoutGasManager);
     }
 
     setIsLoading(false);
-  }, [chain, getUserData]);
+  }, [accountAddress, bundlerClient, chain]);
 
   useEffect(() => {
     login();
   }, [login]);
 
   const importAccount = useCallback(async (accountAddress: `0x${string}`) => {
-    localStorage.setItem("accountAddress", accountAddress);
-
     if (
       localStorage.getItem("accountOwner") &&
       localStorage.getItem("mnemonic")
@@ -368,7 +365,7 @@ export const useAccount = (): IAccountState => {
   }, [bundlerClient, chain, initData, initDataUnsafe, setUser]);
 
   const resetAccount = useCallback(async () => {
-    if (!initData || !initDataUnsafe) return;
+    if (!initData || !initDataUnsafe || !accountAddress) return;
 
     const parser = new UAParser();
     const result = parser.getResult();
@@ -381,15 +378,14 @@ export const useAccount = (): IAccountState => {
       data: {
         publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
         deviceName: `${result.os.name} ${result.os.version}`,
-        accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
+        accountAddress,
       },
     });
 
-    localStorage.removeItem("accountAddress");
     localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
-  }, [initData, initDataUnsafe]);
+  }, [accountAddress, initData, initDataUnsafe]);
 
   const exitAccount = useCallback(async () => {
     const pluginActionExtendedClient = clientWithGasManager?.extend(
@@ -400,7 +396,8 @@ export const useAccount = (): IAccountState => {
       !initData ||
       !initDataUnsafe ||
       !pluginActionExtendedClient ||
-      !clientWithGasManager?.account
+      !clientWithGasManager?.account ||
+      !accountAddress
     )
       return;
 
@@ -415,7 +412,7 @@ export const useAccount = (): IAccountState => {
       data: {
         publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
         deviceName: `${result.os.name} ${result.os.version}`,
-        accountAddress: localStorage.getItem("accountAddress") as `0x${string}`,
+        accountAddress,
       },
     });
 
@@ -424,11 +421,10 @@ export const useAccount = (): IAccountState => {
       account: clientWithGasManager.account,
     });
 
-    localStorage.removeItem("accountAddress");
     localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
-  }, [clientWithGasManager, initData, initDataUnsafe]);
+  }, [accountAddress, clientWithGasManager, initData, initDataUnsafe]);
 
   return {
     clientWithGasManager,

@@ -32,7 +32,7 @@ export interface IUser {
 export interface IGetUserDto {
   publicKey: string;
   deviceName: string;
-  accountAddress: string;
+  accountAddress?: string;
 }
 
 export const getUsersMany = async (

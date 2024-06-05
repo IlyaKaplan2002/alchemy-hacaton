@@ -64,7 +64,6 @@ const ImportAccountPopup: FC<Props> = ({
             <button
               className="w-full transform rounded-lg bg-[#363FF9] p-3 font-semibold text-[#FBFDFF] transition duration-500 ease-in-out hover:scale-105"
               onClick={async () => {
-                localStorage.setItem("accountAddress", accountAddress);
                 localStorage.setItem("mnemonic", mnemonic);
                 localStorage.setItem("accountOwner", address);
                 onClose();
