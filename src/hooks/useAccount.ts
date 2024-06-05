@@ -479,7 +479,7 @@ export const useAccount = (): IAccountState => {
 
     await pluginActionExtendedClient.waitForUserOperationTransaction(res);
 
-    setIsLoggedIn(false);
+    setIsOwner(false);
     localStorage.removeItem("isOwner");
     setDeleteLoading(false);
   }, [accountAddress, clientWithGasManager, initData, initDataUnsafe]);
