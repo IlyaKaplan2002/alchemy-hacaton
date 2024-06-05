@@ -438,6 +438,7 @@ export const useAccount = (): IAccountState => {
       },
     });
 
+    setIsOwner(false);
     localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
