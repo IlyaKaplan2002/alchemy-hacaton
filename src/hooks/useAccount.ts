@@ -206,7 +206,7 @@ export const useAccount = (): IAccountState => {
       setClientWithGasManager(clientWithGasManager);
       setClientWithoutGasManager(clientWithoutGasManager);
     }
-  }, [accountAddress, bundlerClient, chain]);
+  }, [accountAddress, chain]);
 
   useWhyDidYouUpdate("login", {
     accountAddress,
