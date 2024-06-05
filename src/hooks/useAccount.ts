@@ -169,7 +169,7 @@ export const useAccount = (): IAccountState => {
         setIsLoading(false);
       }
     },
-    [initData, initDataUnsafe, setUser],
+    [initData, initDataUnsafe],
   );
 
   const login = useCallback(async () => {
@@ -208,7 +208,14 @@ export const useAccount = (): IAccountState => {
     }
   }, [accountAddress, bundlerClient, chain]);
 
+  useWhyDidYouUpdate("login", {
+    accountAddress,
+    bundlerClient,
+    chain,
+  });
+
   useEffect(() => {
+    console.log("here1");
     login();
   }, [login]);
 
