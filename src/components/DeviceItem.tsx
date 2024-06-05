@@ -4,7 +4,7 @@ import { FC, useContext, useState } from "react";
 import { IDevice, IUser, deleteDevice } from "@/api/apiService";
 import { InitData, InitDataUnsafe } from "@vkruglikov/react-telegram-web-app";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 import { Chain } from "viem";
 import { UAParser } from "ua-parser-js";
 import clsx from "clsx";
