@@ -3,10 +3,12 @@
 import { ChainContext, UserContext } from "@/app/providers";
 import {
   IUser,
+  addDevice,
   createUser,
   deleteDevice,
   deleteUser,
   getUser,
+  getUsersMany,
 } from "@/api/apiService";
 import { LocalAccountSigner, SmartAccountClient } from "@alchemy/aa-core";
 import { createClient, createMnemonic } from "@/helpers/createAccount";
@@ -17,18 +19,41 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { polygonAmoy } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
-import { useWhyDidYouUpdate } from "ahooks";
 
-interface Props {
-  useGasManager: boolean;
+export interface IAccountState {
+  clientWithGasManager: SmartAccountClient | null;
+  clientWithoutGasManager: SmartAccountClient | null;
+  isLoading: boolean;
+  login: () => Promise<void>;
+  signup: () => Promise<void>;
+  importAccount: (accountAddress: `0x${string}`) => Promise<{
+    address: `0x${string}`;
+    mnemonic: string;
+  }>;
+  resetAccount: () => Promise<void>;
+  isOwner: boolean;
+  owners: `0x${string}`[];
+  getOwners: () => Promise<void>;
+  exitAccount: () => Promise<void>;
+  ownersLoaded: boolean;
+  getUserData: () => Promise<void>;
+  availableAccounts: IUser[];
+  availableAccountsLoaded: boolean;
+  importAccountLoaded: boolean;
 }
 
-export const useAccount = ({ useGasManager }: Props) => {
+export const useAccount = (): IAccountState => {
   const [isLoading, setIsLoading] = useState(true);
-  const [client, setClient] = useState<SmartAccountClient | null>(null);
+  const [clientWithoutGasManager, setClientWithoutGasManager] =
+    useState<SmartAccountClient | null>(null);
+  const [clientWithGasManager, setClientWithGasManager] =
+    useState<SmartAccountClient | null>(null);
   const [owners, setOwners] = useState<`0x${string}`[]>([]);
   const [isOwner, setIsOwner] = useState(false);
   const [ownersLoaded, setOwnersLoaded] = useState(false);
+  const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
+  const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
+  const [importAccountLoaded, setImportAccountLoaded] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
@@ -49,6 +74,32 @@ export const useAccount = ({ useGasManager }: Props) => {
       localStorage.removeItem("isOwner");
     }
   }, [isOwner, ownersLoaded]);
+
+  const getAvailableAccounts = useCallback(async () => {
+    if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
+      setAvailableAccountsLoaded(true);
+      return;
+    }
+
+    try {
+      const { data: accounts } = await getUsersMany({
+        telegramData: {
+          initData,
+          initDataUnsafe,
+        },
+        data: undefined,
+      });
+      setAvailableAccounts(accounts);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setAvailableAccountsLoaded(true);
+    }
+  }, [initData, initDataUnsafe, isOwner, ownersLoaded]);
+
+  useEffect(() => {
+    getAvailableAccounts();
+  }, [getAvailableAccounts]);
 
   const chainData = useContext(ChainContext);
   const userData = useContext(UserContext);
@@ -94,7 +145,8 @@ export const useAccount = ({ useGasManager }: Props) => {
           ) {
             localStorage.removeItem("accountAddress");
             localStorage.removeItem("isOwner");
-            setClient(null);
+            setClientWithGasManager(null);
+            setClientWithoutGasManager(null);
           }
         }
       }
@@ -123,31 +175,29 @@ export const useAccount = ({ useGasManager }: Props) => {
         localStorage.setItem("accountOwner", address);
       }
 
-      const client = await createClient({
+      const clientWithGasManager = await createClient({
         mnemonic,
         bundlerClient,
         chain,
         accountAddress: (accountAddress as `0x${string}`) || undefined,
-        useGasManager,
+        useGasManager: true,
+      });
+      const clientWithoutGasManager = await createClient({
+        mnemonic,
+        bundlerClient,
+        chain,
+        accountAddress: (accountAddress as `0x${string}`) || undefined,
+        useGasManager: false,
       });
 
       getUserData();
 
-      setClient(client);
+      setClientWithGasManager(clientWithGasManager);
+      setClientWithoutGasManager(clientWithoutGasManager);
     }
 
     setIsLoading(false);
-  }, [chain, useGasManager, getUserData]);
-
-  useWhyDidYouUpdate("useAccount", {
-    bundlerClient,
-    chain,
-    initData,
-    initDataUnsafe,
-    setUser,
-    useGasManager,
-    client,
-  });
+  }, [chain, getUserData]);
 
   useEffect(() => {
     login();
@@ -176,20 +226,20 @@ export const useAccount = ({ useGasManager }: Props) => {
 
   const getOwners = useCallback(
     async (notSetLoading?: boolean) => {
-      if (client) {
+      if (clientWithoutGasManager) {
         if (!notSetLoading) {
           setOwnersLoaded(false);
         }
-        const pluginActionExtendedClient = client.extend(
+        const pluginActionExtendedClient = clientWithoutGasManager.extend(
           multiOwnerPluginActions,
         );
 
-        if (!pluginActionExtendedClient || !client.account) {
+        if (!pluginActionExtendedClient || !clientWithoutGasManager.account) {
           return;
         }
 
         const owners = await pluginActionExtendedClient.readOwners({
-          account: client.account,
+          account: clientWithoutGasManager.account,
         });
 
         setOwners(
@@ -203,8 +253,67 @@ export const useAccount = ({ useGasManager }: Props) => {
         setOwnersLoaded(true);
       }
     },
-    [client],
+    [clientWithoutGasManager],
   );
+
+  useEffect(() => {
+    getOwners();
+
+    const i = setInterval(() => {
+      getUserData(true);
+      getOwners(true);
+    }, 1000);
+
+    return () => clearInterval(i);
+  }, [getOwners, getUserData]);
+
+  const loginDevice = useCallback(
+    async (account: IUser) => {
+      const { address } = await importAccount(account.accountAddress);
+      await login();
+
+      if (!initData || !initDataUnsafe) {
+        setImportAccountLoaded(true);
+        return;
+      }
+
+      const parser = new UAParser();
+      const result = parser.getResult();
+
+      try {
+        await addDevice({
+          telegramData: {
+            initData,
+            initDataUnsafe,
+          },
+          data: {
+            deviceName: `${result.os.name} ${result.os.version}`,
+            publicKey: address,
+            accountAddress: account.accountAddress,
+          },
+        });
+      } catch (error) {
+      } finally {
+        setImportAccountLoaded(true);
+      }
+    },
+    [initData, initDataUnsafe, importAccount, login],
+  );
+
+  useEffect(() => {
+    if (!availableAccountsLoaded) return;
+
+    if (availableAccounts.length && !clientWithGasManager) {
+      loginDevice(availableAccounts[0]);
+    } else {
+      setImportAccountLoaded(true);
+    }
+  }, [
+    availableAccounts,
+    availableAccountsLoaded,
+    clientWithGasManager,
+    loginDevice,
+  ]);
 
   const signup = useCallback(async () => {
     setIsLoading(true);
@@ -213,10 +322,23 @@ export const useAccount = ({ useGasManager }: Props) => {
 
     localStorage.setItem("mnemonic", mnemonic);
     localStorage.setItem("accountOwner", address);
-    const client = await createClient({ mnemonic, bundlerClient, chain });
+    const clientWithGasManager = await createClient({
+      mnemonic,
+      bundlerClient,
+      chain,
+      useGasManager: true,
+    });
+    if (!clientWithGasManager?.account) return;
+    const clientWithoutGasManager = await createClient({
+      mnemonic,
+      bundlerClient,
+      chain,
+      accountAddress: clientWithGasManager.account.address,
+      useGasManager: false,
+    });
     localStorage.setItem("isOwner", "true");
 
-    if (initData && initDataUnsafe && client?.account?.address) {
+    if (initData && initDataUnsafe && clientWithGasManager?.account?.address) {
       const parser = new UAParser();
       const result = parser.getResult();
 
@@ -229,7 +351,7 @@ export const useAccount = ({ useGasManager }: Props) => {
           data: {
             publicKey: address,
             deviceName: `${result.os.name} ${result.os.version}`,
-            accountAddress: client.account.address,
+            accountAddress: clientWithGasManager.account.address,
           },
         });
 
@@ -239,7 +361,8 @@ export const useAccount = ({ useGasManager }: Props) => {
       }
     }
 
-    setClient(client);
+    setClientWithGasManager(clientWithGasManager);
+    setClientWithoutGasManager(clientWithoutGasManager);
 
     setIsLoading(false);
   }, [bundlerClient, chain, initData, initDataUnsafe, setUser]);
@@ -264,17 +387,20 @@ export const useAccount = ({ useGasManager }: Props) => {
 
     localStorage.removeItem("accountAddress");
     localStorage.removeItem("isOwner");
-    setClient(null);
+    setClientWithGasManager(null);
+    setClientWithoutGasManager(null);
   }, [initData, initDataUnsafe]);
 
   const exitAccount = useCallback(async () => {
-    const pluginActionExtendedClient = client?.extend(multiOwnerPluginActions);
+    const pluginActionExtendedClient = clientWithGasManager?.extend(
+      multiOwnerPluginActions,
+    );
 
     if (
       !initData ||
       !initDataUnsafe ||
       !pluginActionExtendedClient ||
-      !client?.account
+      !clientWithGasManager?.account
     )
       return;
 
@@ -295,16 +421,18 @@ export const useAccount = ({ useGasManager }: Props) => {
 
     await pluginActionExtendedClient.updateOwners({
       args: [[], [localStorage.getItem("accountOwner") as `0x${string}`]],
-      account: client.account,
+      account: clientWithGasManager.account,
     });
 
     localStorage.removeItem("accountAddress");
     localStorage.removeItem("isOwner");
-    setClient(null);
-  }, [client, initData, initDataUnsafe]);
+    setClientWithGasManager(null);
+    setClientWithoutGasManager(null);
+  }, [clientWithGasManager, initData, initDataUnsafe]);
 
   return {
-    client,
+    clientWithGasManager,
+    clientWithoutGasManager,
     isLoading,
     login,
     signup,
@@ -316,5 +444,8 @@ export const useAccount = ({ useGasManager }: Props) => {
     exitAccount,
     ownersLoaded,
     getUserData,
+    availableAccounts,
+    availableAccountsLoaded,
+    importAccountLoaded,
   };
 };

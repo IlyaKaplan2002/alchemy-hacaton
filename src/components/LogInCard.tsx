@@ -1,20 +1,21 @@
 "use client";
 
-import { IUser, addDevice } from "@/api/apiService";
+import { FC, useContext } from "react";
 
-import { FC } from "react";
+import { AccountContext } from "@/app/page";
 import { UAParser } from "ua-parser-js";
-import { useAccount } from "@/hooks/useAccount";
+import { addDevice } from "@/api/apiService";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
-interface Props {
-  login: () => Promise<void>;
-  signup: () => Promise<void>;
-  availableAccounts: IUser[];
-}
+export const LogInCard: FC = () => {
+  const accountContext = useContext(AccountContext);
 
-export const LogInCard: FC<Props> = ({ login, signup, availableAccounts }) => {
-  const { importAccount } = useAccount({ useGasManager: false });
+  const importAccount =
+    accountContext?.importAccount ||
+    (async () => ({ address: "0x", mnemonic: "" }));
+  const login = accountContext?.login || (async () => {});
+  const signup = accountContext?.signup || (async () => {});
+  const availableAccounts = accountContext?.availableAccounts || [];
 
   const [initDataUnsafe, initData] = useInitData();
 

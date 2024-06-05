@@ -2,9 +2,9 @@
 
 import { Address, Chain } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
-import { useAccount } from "@/hooks/useAccount";
+import { AccountContext } from "@/app/page";
 
 interface Props {
   isOpen: boolean;
@@ -23,7 +23,11 @@ const SendNativeTokenPopup: FC<Props> = ({ isOpen, onClose, chain }) => {
   >(null);
   const [useGasManager, setUseGasManager] = useState(false);
 
-  const { client } = useAccount({ useGasManager });
+  const accountContext = useContext(AccountContext);
+  const client =
+    (useGasManager
+      ? accountContext?.clientWithGasManager
+      : accountContext?.clientWithoutGasManager) || null;
 
   return (
     <Dialog

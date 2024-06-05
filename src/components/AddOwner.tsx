@@ -1,10 +1,10 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
+import { AccountContext } from "@/app/page";
 import { Chain } from "viem/chains";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
-import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   chain: Chain;
@@ -18,7 +18,9 @@ const AddOwner: FC<Props> = ({ chain }) => {
   >(null);
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
 
-  const { client } = useAccount({ useGasManager: true });
+  const accountContext = useContext(AccountContext);
+
+  const client = accountContext?.clientWithGasManager || null;
 
   return (
     <div className="flex flex-col gap-8">

@@ -1,14 +1,14 @@
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { IDevice, IUser, deleteDevice } from "@/api/apiService";
 import { InitData, InitDataUnsafe } from "@vkruglikov/react-telegram-web-app";
 
+import { AccountContext } from "@/app/page";
 import { Chain } from "viem";
 import { UAParser } from "ua-parser-js";
 import clsx from "clsx";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
-import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   device: IDevice;
@@ -37,7 +37,8 @@ const DeviceItem: FC<Props> = ({
   >(null);
   const [isSendingUserOperation, setIsSendingUserOperation] = useState(false);
 
-  const { client } = useAccount({ useGasManager: true });
+  const accountContext = useContext(AccountContext);
+  const client = accountContext?.clientWithGasManager || null;
 
   const isOwner = owners.includes(device.publicKey);
 

@@ -2,9 +2,9 @@
 
 import { Address, Chain, encodeFunctionData } from "viem";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
-import { useAccount } from "@/hooks/useAccount";
+import { AccountContext } from "@/app/page";
 
 interface Props {
   token: IERC20Token;
@@ -21,7 +21,8 @@ const SendERC20Token: FC<Props> = ({ token, chain }) => {
     null | string
   >(null);
 
-  const { client } = useAccount({ useGasManager: false });
+  const accountContext = useContext(AccountContext);
+  const client = accountContext?.clientWithoutGasManager || null;
 
   return (
     <div className="flex flex-col gap-8">

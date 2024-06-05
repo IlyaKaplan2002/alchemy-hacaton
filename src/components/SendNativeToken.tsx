@@ -1,9 +1,9 @@
 "use client";
 
 import { Address, Chain } from "viem";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
-import { useAccount } from "@/hooks/useAccount";
+import { AccountContext } from "@/app/page";
 
 interface Props {
   chain: Chain;
@@ -19,7 +19,8 @@ const SendNativeToken: FC<Props> = ({ chain }) => {
     null | string
   >(null);
 
-  const { client } = useAccount({ useGasManager: false });
+  const accountContext = useContext(AccountContext);
+  const client = accountContext?.clientWithoutGasManager || null;
 
   return (
     <div className="flex flex-col gap-8">

@@ -23,12 +23,12 @@ import {
 } from "@headlessui/react";
 import { polygonAmoy, sepolia } from "@alchemy/aa-core";
 
+import { AccountContext } from "@/app/page";
 import DevicesTab from "./DevicesTab";
 import NewDevicePopup from "./NewDevicePopup";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
 import clsx from "clsx";
-import { useAccount } from "@/hooks/useAccount";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 export const ERC20_ABI = [
@@ -111,19 +111,7 @@ export interface IERC20Token {
   balance: number;
 }
 
-interface Props {
-  resetAccount: () => void;
-  exitAccount: () => void;
-  owners: `0x${string}`[];
-  getOwners: () => Promise<void>;
-}
-
-export const ProfileCard: FC<Props> = ({
-  resetAccount,
-  exitAccount,
-  owners,
-  getOwners,
-}) => {
+export const ProfileCard: FC = () => {
   const [balance, setBalance] = useState(0);
   const [tokenAddress, setTokenAddress] = useState("");
   const [importedTokens, setImportedTokens] = useState<IERC20Token[]>([]);
@@ -138,13 +126,20 @@ export const ProfileCard: FC<Props> = ({
   const [initDataUnsafe, initData] = useInitData();
 
   const chainContext = useContext(ChainContext);
+  const accountContext = useContext(AccountContext);
+  const userData = useContext(UserContext);
 
   const chain = chainContext?.chain || polygonAmoy;
   const setChain = chainContext?.setChain || (() => {});
 
-  const { client } = useAccount({ useGasManager: false });
-
-  const userData = useContext(UserContext);
+  const client = accountContext?.clientWithoutGasManager || null;
+  const resetAccount = accountContext?.resetAccount || (async () => {});
+  const exitAccount = accountContext?.exitAccount || (async () => {});
+  const owners = useMemo(
+    () => accountContext?.owners || [],
+    [accountContext?.owners],
+  );
+  const getOwners = accountContext?.getOwners || (async () => {});
 
   const handleImportToken = useCallback(async () => {
     if (!client) return;

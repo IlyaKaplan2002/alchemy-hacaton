@@ -3,9 +3,9 @@
 import { Address, Chain, encodeFunctionData } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
-import { FC, useState } from "react";
+import { FC, useContext, useState } from "react";
 
-import { useAccount } from "@/hooks/useAccount";
+import { AccountContext } from "@/app/page";
 
 interface Props {
   isOpen: boolean;
@@ -25,7 +25,11 @@ const SendERC20TokenPopup: FC<Props> = ({ isOpen, onClose, token, chain }) => {
   >(null);
   const [useGasManager, setUseGasManager] = useState(false);
 
-  const { client } = useAccount({ useGasManager });
+  const accountContext = useContext(AccountContext);
+  const client =
+    (useGasManager
+      ? accountContext?.clientWithGasManager
+      : accountContext?.clientWithoutGasManager) || null;
 
   return (
     <Dialog

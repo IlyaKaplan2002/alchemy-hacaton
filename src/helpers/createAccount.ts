@@ -92,8 +92,6 @@ export const createClient = async ({
 
   if (!client.account) return null;
 
-  localStorage.setItem("accountAddress", client.account.address);
-
   return client
     .extend(multiOwnerPluginActions)
     .extend(pluginManagerActions)

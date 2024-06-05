@@ -1,14 +1,14 @@
 "use client";
 
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useContext, useState } from "react";
 import { IDevice, IUser, deleteDevice } from "@/api/apiService";
 import { InitData, InitDataUnsafe } from "@vkruglikov/react-telegram-web-app";
 
+import { AccountContext } from "@/app/page";
 import { Chain } from "viem";
 import { UAParser } from "ua-parser-js";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
-import { useAccount } from "@/hooks/useAccount";
 
 interface Props {
   isOpen: boolean;
@@ -38,7 +38,8 @@ const NewDevicePopup: FC<Props> = ({
     null | string
   >(null);
 
-  const { client } = useAccount({ useGasManager: true });
+  const accountContext = useContext(AccountContext);
+  const client = accountContext?.clientWithGasManager || null;
 
   const decline = useCallback(async () => {
     if (!accountAddress) return;
