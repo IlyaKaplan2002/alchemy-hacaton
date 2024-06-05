@@ -1,5 +1,6 @@
 import "./globals.css";
 
+import AccountProvider from "./accountProvider";
 import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import { Providers } from "./providers";
@@ -22,7 +23,9 @@ export default function RootLayout({
         <script async src="https://telegram.org/js/telegram-web-app.js" />
       </head>
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <AccountProvider>{children}</AccountProvider>
+        </Providers>
       </body>
     </html>
   );
