@@ -55,6 +55,7 @@ export const useAccount = (): IAccountState => {
   const [ownersLoaded, setOwnersLoaded] = useState(false);
   const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
   const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
+  const [clientLoaded, setClientLoaded] = useState(false);
   const [importAccountLoaded, setImportAccountLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -176,6 +177,9 @@ export const useAccount = (): IAccountState => {
     const mnemonic = localStorage.getItem("mnemonic");
 
     if (!accountAddress) {
+      if (!isLoading) {
+        setClientLoaded(true);
+      }
       return;
     }
 
@@ -206,6 +210,7 @@ export const useAccount = (): IAccountState => {
       setClientWithGasManager(clientWithGasManager);
       setClientWithoutGasManager(clientWithoutGasManager);
     }
+    setClientLoaded(true);
   }, [accountAddress, chain]);
 
   useWhyDidYouUpdate("login", {
@@ -240,48 +245,60 @@ export const useAccount = (): IAccountState => {
 
   const getOwners = useCallback(
     async (notSetLoading?: boolean) => {
-      if (clientWithoutGasManager) {
-        if (!notSetLoading) {
-          setOwnersLoaded(false);
+      if (!clientWithoutGasManager) {
+        if (!isLoading && clientLoaded) {
+          setOwnersLoaded(true);
         }
-        const pluginActionExtendedClient = clientWithoutGasManager.extend(
-          multiOwnerPluginActions,
-        );
-
-        if (!pluginActionExtendedClient || !clientWithoutGasManager.account) {
-          return;
-        }
-
-        const owners = await pluginActionExtendedClient.readOwners({
-          account: clientWithoutGasManager.account,
-        });
-
-        setOwners(
-          !owners.length && localStorage.getItem("isOwner") === "true"
-            ? [localStorage.getItem("accountOwner") as `0x${string}`]
-            : (owners as `0x${string}`[]),
-        );
-
-        setOwnersLoaded(true);
-      } else {
-        setOwnersLoaded(true);
+        return;
       }
+      if (!notSetLoading) {
+        setOwnersLoaded(false);
+      }
+      const pluginActionExtendedClient = clientWithoutGasManager.extend(
+        multiOwnerPluginActions,
+      );
+
+      if (!pluginActionExtendedClient || !clientWithoutGasManager.account) {
+        return;
+      }
+
+      const owners = await pluginActionExtendedClient.readOwners({
+        account: clientWithoutGasManager.account,
+      });
+
+      setOwners(
+        !owners.length && localStorage.getItem("isOwner") === "true"
+          ? [localStorage.getItem("accountOwner") as `0x${string}`]
+          : (owners as `0x${string}`[]),
+      );
+
+      setOwnersLoaded(true);
     },
-    [clientWithoutGasManager],
+    [clientLoaded, clientWithoutGasManager, isLoading],
   );
 
   useEffect(() => {
     console.log("here");
     getUserData();
-    getOwners();
 
     const i = setInterval(() => {
       getUserData(true);
+    }, 1000);
+
+    return () => clearInterval(i);
+  }, [getUserData]);
+
+  useEffect(() => {
+    console.log("here2");
+
+    getOwners();
+
+    const i = setInterval(() => {
       getOwners(true);
     }, 1000);
 
     return () => clearInterval(i);
-  }, [getOwners, getUserData]);
+  }, [getOwners]);
 
   useWhyDidYouUpdate("useEffect", {
     getUserData,
