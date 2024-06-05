@@ -68,6 +68,8 @@ export const useAccount = (): IAccountState => {
   const chainData = useContext(ChainContext);
   const userData = useContext(UserContext);
 
+  console.log("isOwner", isOwner);
+
   const chain = useMemo(
     () => chainData?.chain || polygonAmoy,
     [chainData?.chain],
