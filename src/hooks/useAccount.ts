@@ -160,6 +160,7 @@ export const useAccount = (): IAccountState => {
 
         setUser(user);
         setIsLoggedIn(true);
+        setIsSignupLoading(false);
       } catch (error) {
         console.log(error);
 
@@ -403,8 +404,6 @@ export const useAccount = (): IAccountState => {
 
     setClientWithGasManager(clientWithGasManager);
     setClientWithoutGasManager(clientWithoutGasManager);
-
-    setIsSignupLoading(false);
   }, [bundlerClient, chain, initData, initDataUnsafe, setUser]);
 
   const resetAccount = useCallback(async () => {

@@ -3,21 +3,22 @@
 import { FC, useContext } from "react";
 
 import { AccountContext } from "@/app/accountProvider";
-import { UAParser } from "ua-parser-js";
-import { addDevice } from "@/api/apiService";
-import { useInitData } from "@vkruglikov/react-telegram-web-app";
+
+// import { UAParser } from "ua-parser-js";
+// import { addDevice } from "@/api/apiService";
+// import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
 export const LogInCard: FC = () => {
   const accountContext = useContext(AccountContext);
 
-  const importAccount =
-    accountContext?.importAccount ||
-    (async () => ({ address: "0x", mnemonic: "" }));
-  const login = accountContext?.login || (async () => {});
+  // const importAccount =
+  //   accountContext?.importAccount ||
+  //   (async () => ({ address: "0x", mnemonic: "" }));
+  // const login = accountContext?.login || (async () => {});
   const signup = accountContext?.signup || (async () => {});
-  const availableAccounts = accountContext?.availableAccounts || [];
+  // const availableAccounts = accountContext?.availableAccounts || [];
 
-  const [initDataUnsafe, initData] = useInitData();
+  // const [initDataUnsafe, initData] = useInitData();
 
   return (
     <div
@@ -38,7 +39,7 @@ export const LogInCard: FC = () => {
             Create a new account
           </button>
 
-          {availableAccounts.length > 0 && (
+          {/* {availableAccounts.length > 0 && (
             <div className="text-[18px] font-semibold">
               Import an existing account:
             </div>
@@ -75,7 +76,7 @@ export const LogInCard: FC = () => {
             >
               {account.accountAddress}
             </button>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
