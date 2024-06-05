@@ -113,6 +113,7 @@ export const useAccount = (): IAccountState => {
   }, [isOwner, isSignupLoading, ownersLoaded]);
 
   const getAvailableAccounts = useCallback(async () => {
+    console.log(isOwner, ownersLoaded);
     if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
       setAvailableAccountsLoaded(true);
       return;
