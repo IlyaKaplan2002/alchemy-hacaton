@@ -361,7 +361,7 @@ export const useAccount = (): IAccountState => {
   useEffect(() => {
     if (!availableAccountsLoaded) return;
 
-    if (availableAccounts.length && !clientWithGasManager) {
+    if (availableAccounts.length) {
       loginDevice(availableAccounts[0]);
     } else {
       setImportAccountLoaded(true);
@@ -382,7 +382,7 @@ export const useAccount = (): IAccountState => {
     localStorage.setItem("accountOwner", address);
     console.log("setting isOwner");
     localStorage.setItem("isOwner", "true");
-    setIsOwner(true);
+
     const clientWithGasManager = await createClient({
       mnemonic,
       bundlerClient,
