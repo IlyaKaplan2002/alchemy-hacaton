@@ -452,6 +452,8 @@ export const useAccount = (): IAccountState => {
     )
       return;
 
+    setDeleteLoading(true);
+
     const parser = new UAParser();
     const result = parser.getResult();
 
@@ -467,15 +469,18 @@ export const useAccount = (): IAccountState => {
       },
     });
 
-    await pluginActionExtendedClient.updateOwners({
+    const res = await pluginActionExtendedClient.updateOwners({
       args: [[], [localStorage.getItem("accountOwner") as `0x${string}`]],
       account: clientWithGasManager.account,
     });
 
-    localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
+
+    await pluginActionExtendedClient.waitForUserOperationTransaction(res);
+
     setIsLoggedIn(false);
+    localStorage.removeItem("isOwner");
     setDeleteLoading(false);
   }, [accountAddress, clientWithGasManager, initData, initDataUnsafe]);
 
