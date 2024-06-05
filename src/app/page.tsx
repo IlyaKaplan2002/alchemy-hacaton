@@ -9,7 +9,7 @@ export default function Home() {
   const accountData = useContext(AccountContext);
 
   const clientWithGasManager = accountData?.clientWithGasManager || null;
-  const isLoading = accountData?.isLoading || true;
+  const isLoading = accountData?.isLoading || false;
   const isOwner = accountData?.isOwner || false;
   const ownersLoaded = accountData?.ownersLoaded || false;
   const availableAccountsLoaded = accountData?.availableAccountsLoaded || false;
