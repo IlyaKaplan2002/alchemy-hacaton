@@ -475,6 +475,8 @@ export const useAccount = (): IAccountState => {
     localStorage.removeItem("isOwner");
     setClientWithGasManager(null);
     setClientWithoutGasManager(null);
+    setIsLoggedIn(false);
+    setDeleteLoading(false);
   }, [accountAddress, clientWithGasManager, initData, initDataUnsafe]);
 
   return {
