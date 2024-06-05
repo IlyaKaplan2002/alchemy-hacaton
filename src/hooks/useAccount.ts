@@ -97,6 +97,7 @@ export const useAccount = (): IAccountState => {
     if (isOwner) {
       localStorage.setItem("isOwner", "true");
     } else {
+      console.log("here123");
       localStorage.removeItem("isOwner");
     }
   }, [isOwner, ownersLoaded]);
@@ -377,6 +378,7 @@ export const useAccount = (): IAccountState => {
       accountAddress: clientWithGasManager.account.address,
       useGasManager: false,
     });
+    console.log("setting isOwner");
     localStorage.setItem("isOwner", "true");
 
     if (initData && initDataUnsafe && clientWithGasManager?.account?.address) {
