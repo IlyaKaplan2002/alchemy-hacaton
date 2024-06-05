@@ -176,9 +176,11 @@ export const useAccount = (): IAccountState => {
         console.log(error);
 
         if ((error as any).response.data.message === "User not found") {
+          console.log("hereGetUserData");
           localStorage.removeItem("isOwner");
           setClientWithGasManager(null);
           setClientWithoutGasManager(null);
+          setIsLoggedIn(false);
         }
       } finally {
         setIsLoading(false);
