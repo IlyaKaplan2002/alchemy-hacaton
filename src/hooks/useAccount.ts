@@ -40,7 +40,6 @@ export interface IAccountState {
   getUserData: () => Promise<void>;
   availableAccounts: IUser[];
   availableAccountsLoaded: boolean;
-  importAccountLoaded: boolean;
   isLoggedIn: boolean;
   isSignupLoading: boolean;
   deleteLoading: boolean;
@@ -59,7 +58,6 @@ export const useAccount = (): IAccountState => {
   const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
   const [clientLoaded, setClientLoaded] = useState(false);
   const [isSignupLoading, setIsSignupLoading] = useState(false);
-  const [importAccountLoaded, setImportAccountLoaded] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -328,10 +326,8 @@ export const useAccount = (): IAccountState => {
   const loginDevice = useCallback(
     async (account: IUser) => {
       const { address } = await importAccount(account.accountAddress);
-      await login();
 
       if (!initData || !initDataUnsafe) {
-        setImportAccountLoaded(true);
         return;
       }
 
@@ -350,12 +346,9 @@ export const useAccount = (): IAccountState => {
             accountAddress: account.accountAddress,
           },
         });
-      } catch (error) {
-      } finally {
-        setImportAccountLoaded(true);
-      }
+      } catch (error) {}
     },
-    [initData, initDataUnsafe, importAccount, login],
+    [initData, initDataUnsafe, importAccount],
   );
 
   useEffect(() => {
@@ -363,8 +356,6 @@ export const useAccount = (): IAccountState => {
 
     if (availableAccounts.length && isLoggedIn) {
       loginDevice(availableAccounts[0]);
-    } else {
-      setImportAccountLoaded(true);
     }
   }, [availableAccounts, availableAccountsLoaded, isLoggedIn, loginDevice]);
 
@@ -502,7 +493,6 @@ export const useAccount = (): IAccountState => {
     getUserData,
     availableAccounts,
     availableAccountsLoaded,
-    importAccountLoaded,
     isLoggedIn,
     isSignupLoading,
     deleteLoading,

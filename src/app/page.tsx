@@ -13,7 +13,6 @@ export default function Home() {
   const isOwner = accountData?.isOwner || false;
   const ownersLoaded = accountData?.ownersLoaded || false;
   const availableAccountsLoaded = accountData?.availableAccountsLoaded || false;
-  const importAccountLoaded = accountData?.importAccountLoaded || false;
   const isLoggedIn = accountData?.isLoggedIn || false;
   const isSignupLoading = accountData?.isSignupLoading || false;
   const deleteLoading = accountData?.deleteLoading || false;
@@ -23,7 +22,6 @@ export default function Home() {
     isOwner,
     ownersLoaded,
     availableAccountsLoaded,
-    importAccountLoaded,
     clientWithGasManager,
     isSignupLoading,
     deleteLoading,
@@ -34,7 +32,6 @@ export default function Home() {
       {isLoading ||
       !ownersLoaded ||
       !availableAccountsLoaded ||
-      !importAccountLoaded ||
       isSignupLoading ||
       deleteLoading ? (
         <div className="flex items-center justify-center">
