@@ -88,12 +88,16 @@ export const useAccount = (): IAccountState => {
   useEffect(() => {
     setIsOwner(
       owners.includes(localStorage.getItem("accountOwner") as `0x${string}`) ||
-        localStorage.getItem("isOwner") === "true",
+        (localStorage.getItem("isOwner") === "true" && !owners.length),
     );
   }, [owners]);
 
   useEffect(() => {
-    if (!ownersLoaded || localStorage.getItem("isOwner") || isSignupLoading)
+    if (
+      !ownersLoaded ||
+      (localStorage.getItem("isOwner") && !owners.length) ||
+      isSignupLoading
+    )
       return;
 
     if (isOwner) {
@@ -108,7 +112,7 @@ export const useAccount = (): IAccountState => {
       );
       localStorage.removeItem("isOwner");
     }
-  }, [isOwner, isSignupLoading, ownersLoaded]);
+  }, [isOwner, isSignupLoading, owners.length, ownersLoaded]);
 
   const getAvailableAccounts = useCallback(async () => {
     console.log(isOwner, ownersLoaded);

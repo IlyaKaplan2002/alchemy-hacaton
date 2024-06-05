@@ -99,7 +99,10 @@ const NewDevicePopup: FC<Props> = ({
       }}
       className="relative z-50"
     >
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+      <div
+        className="fixed inset-0 flex w-screen items-center justify-center p-4"
+        style={{ background: "rgba(0, 0, 0, 0.8)" }}
+      >
         <DialogPanel
           className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0F172A] p-10 outline-none"
           style={{ maxWidth: "80vw", width: "80vw" }}
