@@ -474,9 +474,6 @@ export const useAccount = (): IAccountState => {
       account: clientWithGasManager.account,
     });
 
-    setClientWithGasManager(null);
-    setClientWithoutGasManager(null);
-
     await pluginActionExtendedClient.waitForUserOperationTransaction(res);
 
     setIsOwner(false);
