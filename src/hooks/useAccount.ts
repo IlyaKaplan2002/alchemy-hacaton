@@ -296,6 +296,7 @@ export const useAccount = (): IAccountState => {
   );
 
   useEffect(() => {
+    if (deleteLoading) return;
     console.log("here");
     getUserData();
 
@@ -304,7 +305,7 @@ export const useAccount = (): IAccountState => {
     }, 1000);
 
     return () => clearInterval(i);
-  }, [getUserData, isLoggedIn]);
+  }, [deleteLoading, getUserData, isLoggedIn]);
 
   useEffect(() => {
     console.log("here2");
