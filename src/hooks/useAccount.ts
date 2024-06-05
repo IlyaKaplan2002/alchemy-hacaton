@@ -19,6 +19,7 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { polygonAmoy } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
+import { useWhyDidYouUpdate } from "ahooks";
 
 export interface IAccountState {
   clientWithGasManager: SmartAccountClient | null;
@@ -40,6 +41,7 @@ export interface IAccountState {
   availableAccounts: IUser[];
   availableAccountsLoaded: boolean;
   importAccountLoaded: boolean;
+  isLoggedIn: boolean;
 }
 
 export const useAccount = (): IAccountState => {
@@ -54,6 +56,7 @@ export const useAccount = (): IAccountState => {
   const [availableAccounts, setAvailableAccounts] = useState<IUser[]>([]);
   const [availableAccountsLoaded, setAvailableAccountsLoaded] = useState(false);
   const [importAccountLoaded, setImportAccountLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const [initDataUnsafe, initData] = useInitData();
 
@@ -117,6 +120,13 @@ export const useAccount = (): IAccountState => {
     }
   }, [initData, initDataUnsafe, isOwner, ownersLoaded]);
 
+  useWhyDidYouUpdate("getAvailableAccounts", {
+    initData,
+    initDataUnsafe,
+    isOwner,
+    ownersLoaded,
+  });
+
   useEffect(() => {
     getAvailableAccounts();
   }, [getAvailableAccounts]);
@@ -140,6 +150,7 @@ export const useAccount = (): IAccountState => {
           });
 
           setUser(user);
+          setIsLoggedIn(true);
         } catch (error) {
           console.log(error);
 
@@ -443,5 +454,6 @@ export const useAccount = (): IAccountState => {
     availableAccounts,
     availableAccountsLoaded,
     importAccountLoaded,
+    isLoggedIn,
   };
 };

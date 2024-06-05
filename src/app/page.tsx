@@ -14,6 +14,7 @@ export default function Home() {
   const ownersLoaded = accountData?.ownersLoaded || false;
   const availableAccountsLoaded = accountData?.availableAccountsLoaded || false;
   const importAccountLoaded = accountData?.importAccountLoaded || false;
+  const isLoggedIn = accountData?.isLoggedIn || false;
 
   console.log(
     isLoading,
@@ -36,7 +37,7 @@ export default function Home() {
             role="status"
           ></div>
         </div>
-      ) : clientWithGasManager ? (
+      ) : isLoggedIn ? (
         isOwner ? (
           <ProfileCard />
         ) : (
