@@ -299,12 +299,14 @@ export const useAccount = (): IAccountState => {
     console.log("here");
     getUserData();
 
+    if (!isLoggedIn) return;
+
     const i = setInterval(() => {
       getUserData(true);
     }, 1000);
 
     return () => clearInterval(i);
-  }, [getUserData]);
+  }, [getUserData, isLoggedIn]);
 
   useEffect(() => {
     console.log("here2");
