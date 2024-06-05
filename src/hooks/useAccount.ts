@@ -93,14 +93,22 @@ export const useAccount = (): IAccountState => {
   }, [owners]);
 
   useEffect(() => {
-    if (!ownersLoaded || localStorage.getItem("isOwner")) return;
+    if (!ownersLoaded || localStorage.getItem("isOwner") || isSignupLoading)
+      return;
+
     if (isOwner) {
       localStorage.setItem("isOwner", "true");
     } else {
-      console.log("here123");
+      console.log(
+        "here123",
+        ownersLoaded,
+        isSignupLoading,
+        localStorage.getItem("isOwner"),
+        isOwner,
+      );
       localStorage.removeItem("isOwner");
     }
-  }, [isOwner, ownersLoaded]);
+  }, [isOwner, isSignupLoading, ownersLoaded]);
 
   const getAvailableAccounts = useCallback(async () => {
     if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
