@@ -15,6 +15,15 @@ export default function Home() {
   const availableAccountsLoaded = accountData?.availableAccountsLoaded || false;
   const importAccountLoaded = accountData?.importAccountLoaded || false;
 
+  console.log(
+    isLoading,
+    isOwner,
+    ownersLoaded,
+    availableAccountsLoaded,
+    importAccountLoaded,
+    clientWithGasManager,
+  );
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
       {isLoading ||
