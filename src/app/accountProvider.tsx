@@ -1,3 +1,5 @@
+"use client";
+
 import { IAccountState, useAccount } from "@/hooks/useAccount";
 import { PropsWithChildren, createContext } from "react";
 

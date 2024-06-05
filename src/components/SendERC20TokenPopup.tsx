@@ -5,7 +5,7 @@ import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { ERC20_ABI, IERC20Token } from "./ProfileCard";
 import { FC, useContext, useState } from "react";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 
 interface Props {
   isOpen: boolean;

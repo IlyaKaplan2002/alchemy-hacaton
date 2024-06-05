@@ -4,7 +4,7 @@ import { Address, Chain } from "viem";
 import { Dialog, DialogPanel, DialogTitle, Switch } from "@headlessui/react";
 import { FC, useContext, useState } from "react";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 
 interface Props {
   isOpen: boolean;

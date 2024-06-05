@@ -2,7 +2,7 @@
 
 import { FC, useContext } from "react";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 import { UAParser } from "ua-parser-js";
 import { addDevice } from "@/api/apiService";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";

@@ -2,7 +2,7 @@
 
 import { FC, useContext, useState } from "react";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 import { Chain } from "viem/chains";
 import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 

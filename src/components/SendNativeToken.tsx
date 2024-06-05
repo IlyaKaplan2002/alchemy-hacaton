@@ -3,7 +3,7 @@
 import { Address, Chain } from "viem";
 import { FC, useContext, useState } from "react";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 
 interface Props {
   chain: Chain;

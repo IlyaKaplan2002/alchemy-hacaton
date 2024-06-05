@@ -23,7 +23,7 @@ import {
 } from "@headlessui/react";
 import { polygonAmoy, sepolia } from "@alchemy/aa-core";
 
-import { AccountContext } from "@/app/page";
+import { AccountContext } from "@/app/accountProvider";
 import DevicesTab from "./DevicesTab";
 import NewDevicePopup from "./NewDevicePopup";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
