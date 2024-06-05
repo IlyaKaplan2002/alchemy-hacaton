@@ -175,7 +175,10 @@ export const useAccount = (): IAccountState => {
       } catch (error) {
         console.log(error);
 
-        if ((error as any).response.data.message === "User not found") {
+        if (
+          (error as any).response.data.message === "User not found" &&
+          !isSignupLoading
+        ) {
           console.log("hereGetUserData");
           localStorage.removeItem("isOwner");
           setClientWithGasManager(null);
@@ -186,7 +189,7 @@ export const useAccount = (): IAccountState => {
         setIsLoading(false);
       }
     },
-    [initData, initDataUnsafe],
+    [initData, initDataUnsafe, isSignupLoading],
   );
 
   const login = useCallback(async () => {
