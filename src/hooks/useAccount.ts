@@ -132,49 +132,50 @@ export const useAccount = (): IAccountState => {
   }, [getAvailableAccounts]);
 
   const getUserData = useCallback(
-    async (shouldLogout?: boolean) => {
-      if (initData && initDataUnsafe) {
-        try {
-          const parser = new UAParser();
-          const result = parser.getResult();
-
-          const { data: user } = await getUser({
-            telegramData: {
-              initData,
-              initDataUnsafe,
-            },
-            data: {
-              publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
-              deviceName: `${result.os.name} ${result.os.version}`,
-            },
-          });
-
-          setUser(user);
-          setIsLoggedIn(true);
-        } catch (error) {
-          console.log(error);
-
-          if (
-            (error as any).response.data.message === "User not found" &&
-            shouldLogout
-          ) {
-            localStorage.removeItem("isOwner");
-            setClientWithGasManager(null);
-            setClientWithoutGasManager(null);
-          }
+    async (notSetLoading?: boolean) => {
+      if (!initData || !initDataUnsafe) {
+        setIsLoading(false);
+        return;
+      }
+      try {
+        if (!notSetLoading) {
+          setIsLoading(true);
         }
+        const parser = new UAParser();
+        const result = parser.getResult();
+
+        const { data: user } = await getUser({
+          telegramData: {
+            initData,
+            initDataUnsafe,
+          },
+          data: {
+            publicKey: localStorage.getItem("accountOwner") as `0x${string}`,
+            deviceName: `${result.os.name} ${result.os.version}`,
+          },
+        });
+
+        setUser(user);
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.log(error);
+
+        if ((error as any).response.data.message === "User not found") {
+          localStorage.removeItem("isOwner");
+          setClientWithGasManager(null);
+          setClientWithoutGasManager(null);
+        }
+      } finally {
+        setIsLoading(false);
       }
     },
-    [initData, initDataUnsafe],
+    [initData, initDataUnsafe, setUser],
   );
 
   const login = useCallback(async () => {
-    setIsLoading(true);
-
     const mnemonic = localStorage.getItem("mnemonic");
 
     if (!accountAddress) {
-      setIsLoading(false);
       return;
     }
 
@@ -205,8 +206,6 @@ export const useAccount = (): IAccountState => {
       setClientWithGasManager(clientWithGasManager);
       setClientWithoutGasManager(clientWithoutGasManager);
     }
-
-    setIsLoading(false);
   }, [accountAddress, bundlerClient, chain]);
 
   useEffect(() => {
@@ -265,6 +264,8 @@ export const useAccount = (): IAccountState => {
   );
 
   useEffect(() => {
+    console.log("here");
+    getUserData();
     getOwners();
 
     const i = setInterval(() => {
@@ -274,6 +275,11 @@ export const useAccount = (): IAccountState => {
 
     return () => clearInterval(i);
   }, [getOwners, getUserData]);
+
+  useWhyDidYouUpdate("useEffect", {
+    getUserData,
+    getOwners,
+  });
 
   const loginDevice = useCallback(
     async (account: IUser) => {

@@ -8,10 +8,9 @@ import { useInitData } from "@vkruglikov/react-telegram-web-app";
 interface Props {
   chain: Chain;
   owners: `0x${string}`[];
-  getOwners: () => Promise<void>;
 }
 
-const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
+const DevicesTab: FC<Props> = ({ chain, owners }) => {
   const userData = useContext(UserContext);
 
   const [initDataUnsafe, initData] = useInitData();
@@ -26,7 +25,6 @@ const DevicesTab: FC<Props> = ({ chain, owners, getOwners }) => {
               device={device}
               chain={chain}
               owners={owners}
-              getOwners={getOwners}
               initData={initData}
               initDataUnsafe={initDataUnsafe}
               setUserData={userData.setUser}

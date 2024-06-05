@@ -139,7 +139,6 @@ export const ProfileCard: FC = () => {
     () => accountContext?.owners || [],
     [accountContext?.owners],
   );
-  const getOwners = accountContext?.getOwners || (async () => {});
 
   const handleImportToken = useCallback(async () => {
     if (!client) return;
@@ -441,7 +440,7 @@ export const ProfileCard: FC = () => {
               width: "100%",
             }}
           >
-            <DevicesTab chain={chain} owners={owners} getOwners={getOwners} />
+            <DevicesTab chain={chain} owners={owners} />
           </TabPanel>
         </TabPanels>
       </TabGroup>
@@ -454,7 +453,6 @@ export const ProfileCard: FC = () => {
             isOpen={!!devicesToApprove[0]}
             device={devicesToApprove[0]}
             chain={chain}
-            getOwners={getOwners}
             initData={initData}
             initDataUnsafe={initDataUnsafe}
             setUserData={userData.setUser}

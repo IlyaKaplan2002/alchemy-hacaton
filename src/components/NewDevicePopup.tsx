@@ -14,7 +14,7 @@ interface Props {
   isOpen: boolean;
   device: IDevice;
   chain: Chain;
-  getOwners: () => Promise<void>;
+
   initData: InitData;
   initDataUnsafe: InitDataUnsafe;
   setUserData: (data: IUser) => void;
@@ -25,7 +25,6 @@ const NewDevicePopup: FC<Props> = ({
   isOpen,
   device,
   chain,
-  getOwners,
   initData,
   initDataUnsafe,
   setUserData,
@@ -85,14 +84,12 @@ const NewDevicePopup: FC<Props> = ({
           result,
         );
       setSendUserOperationResult(txHash);
-
-      await getOwners();
     } catch (error) {
       setIsSendUserOperationError(true);
     } finally {
       setIsSendingUserOperation(false);
     }
-  }, [client, device.publicKey, getOwners]);
+  }, [client, device.publicKey]);
 
   return (
     <Dialog

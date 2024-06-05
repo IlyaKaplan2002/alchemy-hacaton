@@ -14,7 +14,6 @@ interface Props {
   device: IDevice;
   chain: Chain;
   owners: `0x${string}`[];
-  getOwners: () => Promise<void>;
   initData: InitData;
   initDataUnsafe: InitDataUnsafe;
   setUserData: (data: IUser) => void;
@@ -25,7 +24,6 @@ const DeviceItem: FC<Props> = ({
   device,
   chain,
   owners,
-  getOwners,
   initData,
   initDataUnsafe,
   setUserData,
@@ -100,8 +98,6 @@ const DeviceItem: FC<Props> = ({
 
                   setUserData(userData);
                 }
-
-                await getOwners();
               } catch (error) {
                 setIsError(true);
               } finally {
