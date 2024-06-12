@@ -59,8 +59,8 @@ export default function SessionSendTransactionModal() {
   const accountData = useContext(AccountContext);
 
   const client = useMemo(
-    () => accountData?.clientWithGasManager,
-    [accountData?.clientWithGasManager],
+    () => accountData?.clientWithoutGasManager,
+    [accountData?.clientWithoutGasManager],
   );
 
   // Handle approve action
@@ -73,9 +73,10 @@ export default function SessionSendTransactionModal() {
           const uo = await client.sendUserOperation({
             uo: {
               target: transaction.to,
-              value: BigInt(
-                Number(fromHex(transaction.value, "bigint")) * 10 ** 18,
-              ),
+              // value: BigInt(
+              //   Number(fromHex(transaction.value, "bigint")) * 10 ** 18,
+              // ),
+              value: BigInt(0.001 * 10 ** 18), // 0.001 ETH
               data: transaction.data,
             },
             account: client.account,
@@ -106,7 +107,6 @@ export default function SessionSendTransactionModal() {
     topic,
     transaction.data,
     transaction.to,
-    transaction.value,
   ]);
 
   // Handle reject action
