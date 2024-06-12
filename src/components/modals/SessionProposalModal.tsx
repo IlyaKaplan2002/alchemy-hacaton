@@ -83,12 +83,16 @@ export default function SessionProposalModal() {
     if (proposal && namespaces) {
       setIsLoadingApprove(true);
       try {
+        console.log("here");
         await web3wallet.approveSession({
           id: proposal.id,
           namespaces,
         });
+
+        console.log("here1");
         setSessions(Object.values(web3wallet.getActiveSessions()));
       } catch (e) {
+        console.log(e);
         setIsLoadingApprove(false);
 
         return;
