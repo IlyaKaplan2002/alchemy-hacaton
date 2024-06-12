@@ -129,9 +129,16 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
   /******************************************************************************
    * Set up WalletConnect event listeners
    *****************************************************************************/
-  useEffect(() => {
+
+  const setListeners = useCallback(() => {
     console.log("here web3wallet", web3wallet);
-    if (initialized && web3wallet) {
+
+    if (!web3wallet) {
+      setTimeout(() => setListeners(), 1000);
+      return;
+    }
+
+    if (web3wallet) {
       //sign
       console.log("here");
       web3wallet.on("session_proposal", onSessionProposal);
@@ -151,11 +158,15 @@ export default function useWalletConnectEventsManager(initialized: boolean) {
       setSessions(Object.values(web3wallet.getActiveSessions()));
     }
   }, [
-    initialized,
     onAuthRequest,
     onSessionAuthenticate,
     onSessionProposal,
     onSessionRequest,
     setSessions,
   ]);
+
+  useEffect(() => {
+    if (!initialized) return;
+    setListeners();
+  }, [initialized, setListeners]);
 }
