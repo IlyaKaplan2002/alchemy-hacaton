@@ -45,6 +45,7 @@ export default function WalletConnectPage(params: { deepLink?: string }) {
         pairingExpiredListener,
       );
       await web3wallet.pair({ uri });
+      console.log("connected");
     } catch (error) {
       setModalOpen(false);
     } finally {
