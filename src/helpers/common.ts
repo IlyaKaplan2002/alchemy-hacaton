@@ -15,11 +15,17 @@ export function getSignParamsMessage(params: string[]) {
 }
 
 export function getSignTypedDataParamsData(params: string[]) {
-  const data = params.filter((p) => !isAddress(p))[0];
+  try {
+    console.log("here");
+    const data = params.filter((p) => !isAddress(p))[0];
 
-  if (typeof data === "string") {
-    return JSON.parse(data);
+    if (typeof data === "string") {
+      return JSON.parse(data);
+    }
+
+    return data;
+  } catch (e) {
+    console.log("error", e);
+    return null;
   }
-
-  return data;
 }
