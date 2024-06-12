@@ -34,7 +34,7 @@ export default function Home() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      createWeb3Wallet("wss://eu-central-1.relay.walletconnect.com");
+      createWeb3Wallet(process.env.NEXT_PUBLIC_RELAY_URL as string);
     }
   }, [isLoggedIn]);
 
