@@ -76,7 +76,9 @@ export default function SessionProposalModal() {
         proposal: proposal.params,
         supportedNamespaces,
       });
-    } catch (e) {}
+    } catch (e) {
+      console.log(e);
+    }
   }, [proposal.params, supportedNamespaces]);
 
   const onApprove = useCallback(async () => {
