@@ -63,6 +63,8 @@ export default function Modal() {
     }
   }, [view]);
 
+  console.log("componentView", componentView);
+
   return (
     <NextModal
       backdrop="blur"
@@ -70,6 +72,7 @@ export default function Modal() {
       isOpen={open}
       style={{ border: "1px solid rgba(139, 139, 139, 0.4)" }}
     >
+      test
       {componentView}
     </NextModal>
   );

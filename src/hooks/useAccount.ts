@@ -19,7 +19,6 @@ import { multiOwnerPluginActions } from "@alchemy/aa-accounts";
 import { polygonAmoy } from "viem/chains";
 import { useBundlerClient } from "@alchemy/aa-alchemy/react";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
-import { useWhyDidYouUpdate } from "ahooks";
 
 export interface IAccountState {
   clientWithGasManager: SmartAccountClient | null;
@@ -129,13 +128,6 @@ export const useAccount = (): IAccountState => {
     }
   }, [initData, initDataUnsafe, isOwner, ownersLoaded]);
 
-  useWhyDidYouUpdate("getAvailableAccounts", {
-    initData,
-    initDataUnsafe,
-    isOwner,
-    ownersLoaded,
-  });
-
   useEffect(() => {
     getAvailableAccounts();
   }, [getAvailableAccounts]);
@@ -226,12 +218,6 @@ export const useAccount = (): IAccountState => {
     setClientLoaded(true);
   }, [accountAddress, chain, isLoading]);
 
-  useWhyDidYouUpdate("login", {
-    accountAddress,
-    bundlerClient,
-    chain,
-  });
-
   useEffect(() => {
     login();
   }, [login]);
@@ -310,11 +296,6 @@ export const useAccount = (): IAccountState => {
 
     return () => clearInterval(i);
   }, [getOwners]);
-
-  useWhyDidYouUpdate("useEffect", {
-    getUserData,
-    getOwners,
-  });
 
   const loginDevice = useCallback(
     async (account: IUser) => {
