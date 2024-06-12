@@ -70,10 +70,16 @@ export default function Modal() {
       backdrop="blur"
       onClose={onClose}
       isOpen={open}
+      className="relative z-50"
       style={{ border: "1px solid rgba(139, 139, 139, 0.4)" }}
     >
-      test
-      {componentView}
+      <div
+        className="fixed inset-0 flex w-screen items-center justify-center p-4"
+        style={{ background: "rgba(0, 0, 0, 0.8)" }}
+      >
+        test
+        {componentView}
+      </div>
     </NextModal>
   );
 }
