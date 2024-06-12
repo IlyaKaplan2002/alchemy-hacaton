@@ -1,9 +1,11 @@
 "use client";
 
+import { useContext, useEffect } from "react";
+
 import { AccountContext } from "./accountProvider";
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
-import { useContext } from "react";
+import { createWeb3Wallet } from "@/helpers/walletConnect";
 import useWalletConnectEventsManager from "@/hooks/useWalletConnectEventsManager";
 
 export default function Home() {
@@ -29,6 +31,12 @@ export default function Home() {
   );
 
   useWalletConnectEventsManager(isLoggedIn);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      createWeb3Wallet("wss://eu-central-1.relay.walletconnect.com");
+    }
+  }, [isLoggedIn]);
 
   return (
     <main className="text-foreground bg-background dark flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">

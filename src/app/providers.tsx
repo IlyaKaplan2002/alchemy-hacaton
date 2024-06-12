@@ -19,10 +19,11 @@ import { Web3WalletTypes } from "@walletconnect/web3wallet";
 import { WebAppProvider } from "@vkruglikov/react-telegram-web-app";
 import { createConfig } from "@alchemy/aa-alchemy/config";
 import { polygonAmoy } from "@alchemy/aa-core";
+import { updateSignClientChainId } from "@/helpers/walletConnect";
 
 export interface IChainContext {
   chain: Chain;
-  setChain: Dispatch<SetStateAction<Chain>>;
+  setChain: (chain: Chain) => void;
 }
 
 export interface ModalData {
@@ -96,7 +97,14 @@ export const Providers = (props: PropsWithChildren) => {
     chain,
   });
 
-  const chainData = { chain, setChain };
+  const chainData = {
+    chain,
+    setChain: async (chain: Chain) => {
+      if (!user) return;
+      setChain(chain);
+      await updateSignClientChainId(`eip155:${chain.id}`, user.accountAddress);
+    },
+  };
   const userData = { user, setUser };
 
   return (
