@@ -77,7 +77,15 @@ export default function Modal() {
         className="fixed inset-0 flex w-screen items-center justify-center p-4"
         style={{ background: "rgba(0, 0, 0, 0.8)" }}
       >
-        <div className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0F172A] p-10 outline-none">
+        <div
+          className="flex flex-col space-y-4 rounded-lg border border-none bg-[#0F172A] p-10 outline-none"
+          style={{
+            maxWidth: "80vw",
+            width: "80vw",
+            overflow: "scroll",
+            maxHeight: "80vh",
+          }}
+        >
           {componentView}
         </div>
       </div>
