@@ -55,7 +55,7 @@ export default function SessionProposalModal() {
 
   const supportedNamespaces = useMemo(() => {
     // eip155
-    const eip155Chains = ["eip155:137", "eip155:42161"];
+    const eip155Chains = ["eip155:80002", "eip155:11155111"];
     const eip155Methods = Object.values(METHODS);
 
     return {

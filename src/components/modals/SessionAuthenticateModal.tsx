@@ -52,7 +52,10 @@ export default function SessionAuthenticateModal() {
   const [messages, setMessages] = useState<
     { authPayload: any; message: string; id: number; iss: string }[]
   >([]);
-  const [supportedChains] = useState<string[]>(["eip155:137", "eip155:42161"]);
+  const [supportedChains] = useState<string[]>([
+    "eip155:80002",
+    "eip155:11155111",
+  ]);
   const [supportedMethods] = useState<string[]>(Object.values(METHODS));
   const [signStrategy, setSignStrategy] = useState(1);
   // Ensure request and wallet are defined
