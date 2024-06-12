@@ -28,6 +28,7 @@ import DevicesTab from "./DevicesTab";
 import NewDevicePopup from "./NewDevicePopup";
 import SendERC20TokenPopup from "./SendERC20TokenPopup";
 import SendNativeTokenPopup from "./SendNativeTokenPopup";
+import WalletConnectPage from "./WalletConnect";
 import clsx from "clsx";
 import { useInitData } from "@vkruglikov/react-telegram-web-app";
 
@@ -459,6 +460,8 @@ export const ProfileCard: FC = () => {
             accountAddress={userData?.user && userData.user.accountAddress}
           />
         )}
+
+      <WalletConnectPage />
     </>
   );
 };

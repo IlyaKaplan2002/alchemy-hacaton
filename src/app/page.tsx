@@ -4,6 +4,7 @@ import { AccountContext } from "./accountProvider";
 import { LogInCard } from "@/components/LogInCard";
 import { ProfileCard } from "@/components/ProfileCard";
 import { useContext } from "react";
+import useWalletConnectEventsManager from "@/hooks/useWalletConnectEventsManager";
 
 export default function Home() {
   const accountData = useContext(AccountContext);
@@ -27,8 +28,10 @@ export default function Home() {
     deleteLoading,
   );
 
+  useWalletConnectEventsManager(isLoggedIn);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
+    <main className="text-foreground bg-background dark flex min-h-screen flex-col items-center justify-center gap-4 p-[20px]">
       {isLoading ||
       !ownersLoaded ||
       !availableAccountsLoaded ||
