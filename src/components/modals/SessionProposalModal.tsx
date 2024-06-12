@@ -80,6 +80,7 @@ export default function SessionProposalModal() {
   }, [proposal.params, supportedNamespaces]);
 
   const onApprove = useCallback(async () => {
+    console.log(proposal, namespaces);
     if (proposal && namespaces) {
       setIsLoadingApprove(true);
       try {
