@@ -237,14 +237,6 @@ export const ProfileCard: FC = () => {
     getBalance();
   }, [getBalance]);
 
-  console.log(
-    userData?.user?.devices,
-    initData,
-    initDataUnsafe,
-    devicesToApprove[0],
-    owners.length,
-  );
-
   return (
     <>
       <TabGroup

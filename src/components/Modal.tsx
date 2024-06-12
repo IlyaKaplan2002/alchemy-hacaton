@@ -16,6 +16,8 @@ import SessionUnsuportedMethodModal from "./modals/SessionUnsuportedMethodModal"
 export default function Modal() {
   const modalData = useContext(ModalContext);
 
+  console.log("modalData", modalData);
+
   const open = useMemo(
     () => modalData?.modalOpen || false,
     [modalData?.modalOpen],

@@ -20,16 +20,6 @@ export default function Home() {
   const isSignupLoading = accountData?.isSignupLoading || false;
   const deleteLoading = accountData?.deleteLoading || false;
 
-  console.log(
-    isLoading,
-    isOwner,
-    ownersLoaded,
-    availableAccountsLoaded,
-    clientWithGasManager,
-    isSignupLoading,
-    deleteLoading,
-  );
-
   useWalletConnectEventsManager(isLoggedIn);
 
   useEffect(() => {

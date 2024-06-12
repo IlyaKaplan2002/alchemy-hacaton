@@ -68,8 +68,6 @@ export const useAccount = (): IAccountState => {
   const chainData = useContext(ChainContext);
   const userData = useContext(UserContext);
 
-  console.log("isOwner", isOwner);
-
   const chain = useMemo(
     () => chainData?.chain || polygonAmoy,
     [chainData?.chain],
@@ -105,19 +103,11 @@ export const useAccount = (): IAccountState => {
     if (isOwner) {
       localStorage.setItem("isOwner", "true");
     } else {
-      console.log(
-        "here123",
-        ownersLoaded,
-        isSignupLoading,
-        localStorage.getItem("isOwner"),
-        isOwner,
-      );
       localStorage.removeItem("isOwner");
     }
   }, [isOwner, isSignupLoading, owners.length, ownersLoaded]);
 
   const getAvailableAccounts = useCallback(async () => {
-    console.log(isOwner, ownersLoaded);
     if (!initData || !initDataUnsafe || isOwner || !ownersLoaded) {
       setAvailableAccountsLoaded(true);
       return;
@@ -184,7 +174,6 @@ export const useAccount = (): IAccountState => {
           (error as any).response.data.message === "User not found" &&
           !isSignupLoading
         ) {
-          console.log("hereGetUserData");
           localStorage.removeItem("isOwner");
           setClientWithGasManager(null);
           setClientWithoutGasManager(null);
@@ -244,7 +233,6 @@ export const useAccount = (): IAccountState => {
   });
 
   useEffect(() => {
-    console.log("here1");
     login();
   }, [login]);
 
@@ -303,7 +291,7 @@ export const useAccount = (): IAccountState => {
 
   useEffect(() => {
     if (deleteLoading) return;
-    console.log("here");
+
     getUserData();
 
     const i = setInterval(() => {
@@ -314,8 +302,6 @@ export const useAccount = (): IAccountState => {
   }, [deleteLoading, getUserData, isLoggedIn]);
 
   useEffect(() => {
-    console.log("here2");
-
     getOwners();
 
     const i = setInterval(() => {
@@ -373,7 +359,7 @@ export const useAccount = (): IAccountState => {
 
     localStorage.setItem("mnemonic", mnemonic);
     localStorage.setItem("accountOwner", address);
-    console.log("setting isOwner");
+
     localStorage.setItem("isOwner", "true");
 
     const clientWithGasManager = await createClient({
