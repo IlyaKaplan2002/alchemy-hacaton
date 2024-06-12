@@ -52,17 +52,34 @@ export default function SessionSignTypedDataModal() {
 
   const request = useMemo(() => params?.request, [params?.request]);
 
-  let method = request?.method;
   // Get data
-  const data = getSignTypedDataParamsData(request?.params);
+  const data = useMemo(
+    () => getSignTypedDataParamsData(request?.params),
+    [request?.params],
+  );
 
-  const isPermissionRequest = data?.domain?.name === "eth_getPermissions_v1";
-  let permissionScope = [];
-  if (isPermissionRequest) {
-    permissionScope = data?.message?.scope || [];
-    method = "eth_getPermissions_v1";
-    console.log({ permissionScope });
-  }
+  console.log("data", data);
+
+  const isPermissionRequest = useMemo(
+    () => data?.domain?.name === "eth_getPermissions_v1",
+    [data?.domain?.name],
+  );
+
+  const method = useMemo(
+    () => (isPermissionRequest ? "eth_getPermissions_v1" : request?.method),
+    [isPermissionRequest, request?.method],
+  );
+
+  const permissionScope = useMemo(() => {
+    let result = [];
+    if (isPermissionRequest) {
+      result = data?.message?.scope || [];
+      console.log({ result });
+    }
+
+    return result;
+  }, [data?.message?.scope, isPermissionRequest]);
+
   // Handle approve action (logic varies based on request method)
   const onApprove = useCallback(async () => {
     if (requestEvent && topic && client?.account) {
