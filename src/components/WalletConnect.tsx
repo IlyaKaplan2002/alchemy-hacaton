@@ -93,7 +93,7 @@ export default function WalletConnectPage(params: { deepLink?: string }) {
               color="primary"
               data-testid="uri-connect-button"
             >
-              {loading ? <Spinner size="md" color={"white"} /> : "Connect"}
+              {loading ? <Spinner size="sm" color={"white"} /> : "Connect"}
             </Button>
           }
         />

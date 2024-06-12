@@ -276,6 +276,18 @@ export const ProfileCard: FC = () => {
               </button>
             )}
           </Tab>
+          <Tab as={Fragment}>
+            {({ hover, selected }) => (
+              <button
+                className={clsx(
+                  "mr-5 rounded-lg py-1.5 pl-3 pr-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
+                  (selected || hover) && "bg-white/5",
+                )}
+              >
+                WalletConnect
+              </button>
+            )}
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel
@@ -443,6 +455,15 @@ export const ProfileCard: FC = () => {
           >
             <DevicesTab chain={chain} owners={owners} />
           </TabPanel>
+
+          <TabPanel
+            className="flex flex-col gap-8"
+            style={{
+              width: "100%",
+            }}
+          >
+            <WalletConnectPage />
+          </TabPanel>
         </TabPanels>
       </TabGroup>
       {userData?.user?.devices &&
@@ -460,8 +481,6 @@ export const ProfileCard: FC = () => {
             accountAddress={userData?.user && userData.user.accountAddress}
           />
         )}
-
-      <WalletConnectPage />
     </>
   );
 };
